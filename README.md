@@ -6,3 +6,5 @@
 - tidal
 - rubix
 - erebus
+
+過去の履歴にもどる
