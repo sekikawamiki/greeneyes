@@ -1,0 +1,26 @@
+d1 $ s "bd" # speed "10" # speed "2"
+
+d2 $ n "0 3 7 5 8 12 7 10 14 0 3 7" # s "supermandolin*2"
+
+d3 $ s "supermandolin*2" # n "0 3 7 5 8 12 7 10 14 0 3 7"
+
+d4 $ n "c5 d5 g5 c6 d5 g6" # s "supermandolin"
+
+d5 $ n "0 3 7 5 8 12 7 10 14 0 3 7" # s "supermandolin*2" -- # up "10"
+
+--do
+--let progresstion p = p |*| up (slow 8 $ "0 5 10 7")
+
+d6 $ s "pluck" |*| up (slow 8 $ "0 5 10 7")
+
+d7 $ stut 2 0.3 1.003 $ up "0 3 7 10" |*| up "2" # s "pluck"
+
+d8 $ s "pluck" |*| speed "0.5" |*| gain "1.0" # shape 0.7 # cut "1"
+
+do
+let progresstion p = p |*| up (slow 8 $ "0 5 10 7")
+let melody = progresstion $ stut 2 0.3 1.003 $ up "0 3 7 10" |*| up "12" # s "pluck"
+let bass = progresstion $ s "pluck" |*| speed "0.5" |*| gain "1.0" # shape 0.7 # cut "-1"
+d9 $ stack [melody, bass]
+
+hush

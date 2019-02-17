@@ -1,0 +1,87 @@
+d1 $ s "ho ho:2 ho:3 hc"
+
+d1 silence
+
+-- We can slow it down by different amounts, such as by a half:
+
+-- 我々は、半分のような異なる量でそれを遅らせることができます：
+
+d2 $ slow 2 $ s "ho ho:2 ho:3 hc"
+
+d2 silence
+
+-- Or by four thirds (i.e. speeding it up by a third; 4/3 means four over three):
+
+-- または4分の3（つまり3分の1のスピードアップ、4/3というのは3分の4のスピードを意味します）：
+
+d3 $ slow (4/3) $ s "ho ho:2 ho:3 hc"
+
+d3 silence
+
+-- But if we use spread, we can make a pattern which alternates between the two speeds:
+
+-- しかし、spread を使用すると、2つのスピードを交互に繰り返すパターンを作ることができます。
+
+d4 $ spread slow [2, 4/3] $ s "ho ho:2 ho:3 hc"
+
+d4 silence
+
+-- In recent versions of tidal, you can actually do without the spread and instead pass a pattern of parameters straight to the function:
+
+-- 最近のバージョンの潮汐では、実際には広がりがなくても、パラメータのパターンを直接関数に渡すことができます：
+
+d5 $ slow "<2 4/3>" $ s "ho ho:2 ho:3 hc"
+
+d5 silence
+
+-- One advantage of this is that you can provide polyphonic parameters, e.g.:
+
+-- これの利点の1つは、ポリフォニックパラメータを指定できることです。
+
+d6 $ slow "<2 4/3, 3>" $ s "ho ho:2 ho:3 hc"
+
+d6 silence
+
+-- This is quite experimental and might not work with all functions yet.
+-- There’s another version of spread called fastspread. True to its name, the result is faster, because it squeezes all the variations into one cycle. As the following gives two parameters to slow, it goes twice as fast as if you’d used spread:
+
+-- これはかなり実験的なものであり、まだすべての機能で動作しない可能性があります。
+-- fastspreadという別のバージョンのスプレッドがあります。 その名の通り、すべてのバリエーションを1つのサイクルに圧縮するので、結果はより速くなります。 次の2つのパラメータは遅くなるため、スプレッドを使用した場合の2倍の速さになります。
+
+d7 $ fastspread slow [2, 4/3] $ s "ho ho:2 ho:3 hc"
+
+d7 silence
+
+-- In previous versions of Tidal, spread was actually the same as fastspread. Now, slowspread is an alias of spread, but you may as well type the latter, as it’s shorter!
+
+-- 以前のバージョンのTidalでは、spreadは実際にはfastspreadと同じでした。 さて、slowspread はspread のエイリアスですが、後者の方が短くても良いでしょう。
+
+--- [toScale]
+-- The toScale function lets you turn a pattern of notes within a scale (expressed as a list) to note numbers. For example
+
+-- toScale機能を使うと、音階の中の音符のパターン（リストとして表示）を音符の番号に変えることができます。 例えば
+
+d8 $ slow 4 $ n (toScale [0, 4, 7] "0 1 2 3") # s "arpy"
+
+d8 silence
+
+-- will turn the pattern "0 1 2 3" into the pattern "0 4 7 12" by “picking” those notes out of the provided scale [0, 4, 7].
+-- toScale assumes your scale repeats after a single octave, if it doesn’t you can use a primed version toScale' size. For example
+
+-- 与えられたスケール[0、4、7]からそれらのノートを「ピッキング」することにより、パターン「0 1 2 3」をパターン「0 4 7 12」に変える。
+--  toScaleは、1オクターブ後にスケールが繰り返されることを前提にしています。 例えば
+
+d9 $ toScale' 24 [0, 4,7,10,14,17] (run 8) # s "arpy*8"
+
+d9 silence
+
+-- A large number of scale and chord names have been provided in the Sound.Tidal.Chords and Sound.Tidal.Scales modules. If not already loaded, you can gain access to these with a command like
+
+-- Sound.Tidal.ChordsとSound.Tidal.Scalesモジュールには、多数のスケールとコード名が用意されています。 まだロードされていない場合は、次のようなコマンドでこれらのファイルにアクセスできます。
+
+-- import qualified Sound.Tidal.Scales as Scales
+
+
+-- and then use them as Scales.ionian, Scales.dorian, Scales.phrygian, etc…
+
+-- Scales.ionian、Scales.dorian、Scales.phrygianなどとして使用します。

@@ -1,0 +1,103 @@
+cps 1
+
+---[swingBy]
+-- The function swingBy x n breaks each cycle into n slices, and then delays events in the second half of each slice by the amount x, which is relative to the size of the (half) slice. So if x is 0 it does nothing, 0.5 delays for half the “note” duration, and 1 will wrap around to doing nothing again. The end result is a shuffle or swing-like rhythm. For example
+
+-- 関数swingBy x nは、各サイクルをn個のスライスに分割し、各スライスの後半にあるイベントを（半分）スライスのサイズに対する相対的な量xだけ遅延させます。 したがって、xが0の場合は何もしません。「メモ」の半分の時間は0.5遅延し、もう一度何もしないように1が戻ります。 最終的な結果はシャッフルまたはスイングのようなリズムです。 例えば
+
+d1 $ slow 4 $ swingBy (1/6) 4 $ s "hh*8"
+
+d1 silence
+
+-- will delay every other "hh" 1/3 of the way to the next "hh".
+-- swing is an alias for swingBy (1/3)
+
+-- 他のすべての "hh"を次の "hh"に1/3遅らせます。
+-- swingはswingByのエイリアスです（1/3）
+
+--- [when]
+-- Only when the given test function returns True the given pattern transformation is applied. The test function will be called with the current cycle as a number.
+
+-- 与えられたテスト関数がTrueを返す場合にのみ、与えられたパターン変換が適用されます。 現在のサイクルを番号としてテスト関数が呼び出されます。
+
+d2 $ slow 2 $ when ((elem '4').show)
+(striate 6)
+$ s "hh cp"
+
+d2 silence
+
+-- The above will only apply striate 4 to the pattern if the current cycle number contains the number 4. So the fourth cycle will be striated and the fourteenth and so on. Expect lots of striates after cycle number 399.
+
+-- 現在のサイクル番号に4が含まれている場合、上記にはパターンにストライテート4が適用されます。したがって、4番目のサイクルがストライピングされ、14番目のサイクルが繰り返されます。 サイクル番号399の後にストライテントがたくさんある。
+
+--- [whenmod]
+-- whenmod has a similar form and behavior to every, but requires an additional number. Applies the function to the pattern, when the remainder of the current loop number divided by the first parameter, is greater or equal than the second parameter.
+
+-- For example the following makes every other block of four loops twice as dense:
+
+-- whenmodはすべての人と同様の形式と動作をしますが、追加の番号が必要です。 現在のループ番号の残りの部分を第1のパラメータで割った値が第2のパラメータよりも大きいか等しい場合、関数をパターンに適用します。
+
+-- たとえば、次のようにすると、4つのループのすべてのブロックが密度の2倍になります。
+
+d3 $ whenmod 8 4 (fast 2) (s "bd sn kurt")
+
+d3 silence
+
+--- [within]
+-- Use within to apply a function to only a part of a pattern. For example, to apply fast 2 to only the first half of a pattern:
+
+-- パターンの一部のみに関数を適用するには、withinを使用します。 たとえば、パターンの最初の部分だけに高速2を適用するには、次のようにします。
+
+d4 $ slow 4 $ within (0.5, 1) (fast 2) $ s "bd*8 sn lt mt hh hh hh hh"
+
+d4 silence
+
+-- Or, to apply `(# speed “0.5”) to only the last quarter of a pattern:
+-- あるいは、パターンの最後の四半分のみに `（＃speed" 0.5 "）を適用するには：
+
+d5 $ slow 4 $ within (0.75, 1)(# speed "0.5") $ s "bd*8 sn lt mt hh hh hh hh"
+
+d5 silence
+
+--- [[Compositions]]  作曲
+--Some functions work with multiple sets of patterns, interlace them or play them successively.
+
+--いくつかの関数は、複数のパターンセットを扱い、インターレースしたり、連続して再生したりします。
+
+--- [seqP]
+--There is a similar function named seqP which allows you to define when a sound within a list starts and ends. The code below contains three separate patterns in a “stack”, but each has different start times (zero cycles, eight cycles, and sixteen cycles, respectively). In the example, ll patterns stop after 12 cycles:
+
+-- seqPという名前の同様の関数があり、リスト内のサウンドの開始と終了を定義することができます。 以下のコードは、「スタック」内に3つのパターンが含まれていますが、それぞれ開始時間が異なります（ゼロサイクル、8サイクル、16サイクル）。 この例では、llパターンは12サイクル後に停止します。
+
+d6 $ seqP [
+  (0, 12, sound "bd bd*2"),
+  (4, 12, sound "hh*2 [sn cp] cp future*4"),
+  (8, 12, sound (samples "arpy*8" (run 16)))
+]
+
+d6 silence
+
+-- If you run the above, you probably won’t hear anything. This is because cycles start ticking up as soon as you start Tidal, and you have probably already gone part cycle 12.
+-- You can reset the cycle clock back to zero by running cps (-1) followed by cps 1, or whatever tempo you want to restart at. Alternatively, you can shift time for the seqP pattern back to zero like this:
+
+-- 上記を実行すると、おそらく何も聞こえません。 これは、Tidalを開始するとすぐにサイクルが開始され、おそらく既にパートサイクル12になっているからです。
+-- cps（-1）の後にcps 1を実行するか、または再起動するテンポを実行することで、サイクルクロックをゼロに戻すことができます。 あるいは、次のようにseqPパターンの時間をゼロに戻すことができます。
+
+d7 $ (pure now) ~> seqP [
+(0, 12, sound "bd bd*2"),
+(4, 12, sound "hh*2 [sn cp] cp future*4"),
+(8, 12, sound (samples "arpy*8" (run 16)))
+]
+
+d7 silence
+
+-- A third option is to use seqPLoop instead, which will keep looping the sequence when it gets to the end:
+-- 3番目のオプションは、代わりにseqPLoopを使用することです。これは、シーケンスが最後になるとシーケンスをループし続けます。
+
+d8 $ (pure now) ~> seqPLoop [
+(0, 12, sound "bd bd*2"),
+(4, 12, sound "hh*2 [sn cp] cp future*4"),
+(8, 12, sound (samples "arpy*8" (run 16)))
+]
+
+d8 silence

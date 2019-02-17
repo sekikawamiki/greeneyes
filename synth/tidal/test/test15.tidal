@@ -1,0 +1,78 @@
+--- [gap]
+-- gap is similar to chop in that it granualizes every sample in place as it is played, but every other grain is silent. Use an integer value to specify how many granules each sample is chopped into:
+
+-- gap はchop に似ています。それは、再生されるごとにすべてのサンプルをグラニュラライズ(顆粒化する)しますが、他のグレイン（粒）はすべてサイレントです。 各サンプルがチョップされる顆粒の数を指定するには、整数値を使用します。
+
+d1 $ gap 8 $ s "jvbass"
+
+d1 silence
+
+d2 $ gap 16 $ s "[jvbass drum*4]"
+
+d2 silence
+
+-- You can also provide a pattern here:
+
+-- ここにパターンを入力することもできます：
+
+d3 $ gap "<32 16 8 4>" $ s "jvbass"
+
+d3 silence
+
+--- [chop]
+-- chop granualizes every sample in place as it is played, turning a pattern of samples into a pattern of sample parts. Use an integer value to specify how many granules each sample is chopped into:
+
+-- chop は、演奏されるごとにすべてのサンプルを所定の位置にグラニュライズし、サンプルパターンをサンプルパートのパターンに変換します。 各サンプルがチョップされる顆粒の数を指定するには、整数値を使用します。
+
+d4 $ chop 8 $ s "arpy ~ feel*2 newnotes"
+
+d4 silence
+
+-- You can pattern that first parameter:
+
+-- 最初のパラメータをパターン化することができます：
+
+d5 $ chop "<4 128 32>" $ s "arpy ~ feel*2 newnotes"
+
+d5 silence
+
+-- You end up with a pattern of the chopped up bits of samples, so for example if you then reverse the pattern, you reverse the order of the bits:
+
+-- 最終的にサンプルの切り刻まれたビットのパターンになります。たとえば、パターンを逆にすると、ビットの順序が逆になります。
+
+d6 $ slow 2 $ rev $ chop 16 $ s "breaks125"
+
+d6 silence
+
+-- Lets try that reverse in just one speaker:
+
+-- 1つのスピーカーでその逆を試してみましょう：
+
+d7 $ slow 2 $ jux rev $ chop 16 $ s "breaks125"
+
+d7 silence
+
+-- Different values of chop can yield very different results, depending on the samples used:
+
+-- 使用されるサンプルに応じて、異なるchop 値が非常に異なる結果をもたらす可能性があります。
+
+d8 $ chop 32 $ s (samples "arpy*8" (run 16))
+
+d8 silence
+
+-- You can also use chop (or (striate)[#striate]) with very long samples, to cut it into short chunks and pattern those chunks. The following cuts a sample into 32 parts, and plays it over 8 cycles:
+
+-- 非常に長いサンプルでchop（または（striate）[＃striate]）を使用して短いチャンクにカットし、それらのチャンクをパターン化することもできます。 次の例では、サンプルを32分割して8サイクルにわたって再生します。
+
+d9 $ loopAt 16 $ chop 32 $ s "bev"
+
+d9 silence
+
+-- The loopAt takes care of changing the speed of sample playback so that the sample fits in the given number of cycles.
+--You can’t hear that the sample has been cut into bits in the above. This becomes more apparent when you do further manipulations of the pattern, for example rev to reverse the order of the cut up bits:
+
+-- loopAt はサンプルが指定されたサイクル数に収まるようにサンプルの再生速度を変更します。
+-- あなたはサンプルが上記のビットにカットされていることを聞くことはできません。 これは、パターンをさらに操作するときにはっきりと現れます。例えば、revは切り上げビットの順序を逆にします。
+
+--See also striate.
+-- striate も参照してください。

@@ -1,0 +1,136 @@
+--- 【 <~, ~> 】
+--These time-shift the pattern on the RHS by the number of cycles on the LHS.
+-- これらは、RHS上のパターンをLHS上のサイクル数だけ時間シフトする。
+
+-- 0.25 ~> "a b c d"
+--is the same as "d a b c"
+
+
+d1 $ slow 2 $ every 2 (0.25 ~>) $ s "arpy bd sn cp"
+
+d1 silence
+
+--- 【 <~> 】
+-- Pattern replacement: takes the elements of the second pattern and makes a new pattern using the structure of the first
+
+-- パターン置換：第2のパターンの要素を取り、第1のパターンの構造を使用して新しいパターンを作成する
+
+--"x x x" <~> "bd sn"
+
+-- is the same as "bd sn bd"
+-- one cycle and "sn bd sn"
+
+-- "bd sn bd"と同じです
+-- 1サイクルと "sn bd sn"
+
+--- 【 <<~, ~>> 】
+--Pattern rotation, these move the elements of the pattern without changing the structure of the pattern
+
+--パターンの回転、これらはパターンの構造を変更することなくパターンの要素を移動します
+
+--1 ~>> "a ~ b c"
+--is the same as "c ~ a b"
+
+-- 1〜>> "a〜b c"
+-- "c〜a b"と同じです
+
+-- 【!!!】
+--List indexing with built-in modulo so you can’t go past the end of the list
+
+--モジュロを内蔵したインデックス作成をリストし、リストの最後を過ぎることはできません
+
+--[1 2 3 4]!!!5
+--returns 2
+
+---[useful Haskell operators]
+-- 【 <$> 】
+-- A synonym for fmap, useful for mapping numerical functions so they work on patterns.
+--fmapの同義語。パターンを扱うように数値関数をマッピングするのに便利です。
+
+-- 【 <*> 】
+--A synonym for ap, useful for promoting functions to work with patterns.
+--apの同義語。パターンを扱う関数の宣伝に便利です。
+
+-- (+2) <$> "1 2 3 4"
+-- is the same as "3 4 5 6"
+-- (+) <$> "1 2 3 4" <*> "2" is also the same
+
+-- （+2）<$> "1 2 3 4"
+-- "3 4 5 6"と同じです
+-- （+）<$> "1 2 3 4" <*> "2"も同じです
+
+--　【 !! 】
+--Haskell’s way of doing list indexing
+--Haskellのリスト索引付けのやり方
+
+--　【 $ 】
+--An alternative to parentheses, means “evaluate everything on the right first”
+-- かっこの代わりに、「最初にすべてを評価する」という意味です
+
+-- 【 . 】
+--Function composition, needs functions with only a single argument unspecified
+-- 関数の構成は、単一の引数のみを指定して関数を必要とする
+
+--- [[Utility]]
+--[choose]
+--choose randomly picks an element from the given list:
+-- 与えられたリストから要素をランダムに選択する：
+
+d2 $ s "arpy*4" # n (choose [0, 2, 5])
+
+d2 silence
+
+d3 $ sometimes (|+| up (choose[ 3, 7, 2, 9, (-3), (-7),(-9),(-2)])) $ n "~ 0 ~ 0" # s "sid"
+
+d3 silence
+
+---[irand]
+-- irand n generates a pattern of (pseudo-)random integers between 0 to n-1 inclusive. Notably used to pick a random samples from a folder:
+
+--irand nは0からn-1までの（擬似）ランダムな整数のパターンを生成します。 特に、フォルダからランダムなサンプルを選ぶために使用されます：
+
+d4 $ s "amencutup*8" # n (irand 8)
+
+d4 silence
+
+---[pequal]
+--Quickly test if the first and the second given pattern are the same in the given number of cycles. This is more of a building block for higher-level tidal functions.
+
+--与えられたサイクル数で第1と第2の与えられたパターンが同じであるかどうかを迅速にテストします。 これは、より高い水準の潮汐機能の基礎ブロックである。
+
+---[rand]
+--rand generates a pattern of (pseudo-)random, floating point numbers between 0 and 1. For example, to bound randomly around the stereo field you can do this:
+
+--randは0と1の間の（擬似）ランダムな浮動小数点数のパターンを生成します。たとえば、ステレオフィールドの周りをランダムに束縛するには、次のようにします。
+
+d5 $ s "bd*8" # pan rand
+
+d5 silence
+
+-- Or to enjoy randomised speed from 0.5 to 1.5, you can simply add 0.5 to it:
+
+-- またはランダム化された速度を0.5から1.5まで楽しむには、0.5を追加するだけです。
+
+d6 $ s "bd*8" # speed (rand + 0.2)
+
+d6 silence
+
+--- [run]
+--run n generates a pattern representing a cycle of numbers from 0 to n-1 inclusive. Notably used to ‘run’ through a folder of samples in order:
+
+-- nを実行すると、0からn-1までの数のサイクルを表すパターンが生成されます。 特に、サンプルのフォルダを順番に「実行」するために使用されます。
+
+d7 $ n (run 8) # s "amencutup"
+
+d7 silence
+
+d8 $ every 2 (slow 2) $ n (run 8) # s "amencutup"
+
+d8 silence
+
+--The first parameter to run can be given as a pattern:
+
+-- 実行する最初のパラメータはパターンとして与えることができます：
+d9 $ n (run "<4 8 4 6>") # s "amencutup"
+
+d9 silence

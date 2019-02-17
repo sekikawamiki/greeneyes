@@ -1,0 +1,35 @@
+bps (196/60)
+
+d1 $ every 4 (|*| up (-1)) $ s "arpy*6" # coarse "700 200 500 400 300 200" # gain "1.3 1.5 1.3 1.4" # pan sine1 # up "1"
+
+d1 silence
+
+d2 $ every 4 (density 2) $ every 4 (zoom (0, 0.5)) $ s "gabbalouder:1*3" # speed "0.3" # gain "0.8"
+
+d2 silence
+
+d3 $ slow 2 $ every 2 (|*| up 1) $ s "~ ~ cp" # up "1" # gain "1"
+
+d4 $ every 2 (rev) $ s "cp*3 ~ cp ~" # legato "1" # gain "0.9"
+
+d5 $ n "c5 f5" # s "supersaw" # resonance "0.8"
+
+d5 silence
+
+d6 $ n "0 1 2 3 4 5" # s "supersaw" -- # sustain "0.8 1.2 0.4"
+
+d6 silence
+
+d7 $ midinote "60 65" # s "supersaw"
+
+do
+  let progresstion p = p |*| up (slow 8 $ "0 5 10 7")
+  let melody = progresstion $ stut 4 0.3 1.003 $ fast 2 $ up "0 3 7 10" |*| up "12" # s "pluck" # sustain "0.7"
+  let bass = progresstion $ s "pluck" |*| speed "0.5" |*| gain "1.0" # shape 0.6 # cut "-1"
+  d8 $ stack [melody, bass]
+
+do
+  let hoge
+
+
+hush

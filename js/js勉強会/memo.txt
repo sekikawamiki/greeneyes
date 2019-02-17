@@ -1,0 +1,78 @@
+テスタブル
+
+オブジェクトの数だけ回す
+
+var obj = {
+a: 0,
+b: 1,
+c: 2
+}
+
+for (let val in obj) {
+console.log(obj[val]);
+}
+
+object.keys(obj);
+
+object.keys(obj).forEach(function(key){
+console.log(obj[key]);
+})
+
+for(let var in obj) {
+  if(obj.hasownProperty(val)) {
+  console.log(obj[val]);
+  }
+}
+
+不要なelseを使わない書き方をする
+
+
+var cond = true;
+
+else を使わずreturn する
+(funtion(){
+  if( cond === true){
+    console.log(1);
+
+    return;
+  }
+})；
+
+
+値渡しと参照渡し
+
+
+カプセル化
+クロージャー
+
+
+var i = 0;
+var task = function(){
+
+var i  = 0;
+ retuen function(){
+  console.log(i++);
+ }
+
+}
+task();
+
+3が３回でる
+var i = 0;
+var max = 3;
+for (i; i< max; i++){
+  setTimeout(function(){
+    console.log(i)
+  }, 1000);
+}
+○
+var i = 0;
+var max = 3;
+for (i; i< max; i++){
+  (function(n){
+    setTimeout(function(){
+      console.log(n)
+    }, 1000);
+  }(i));
+
+}

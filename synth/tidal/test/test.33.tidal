@@ -1,0 +1,16 @@
+do
+cps 1
+let melody = slow 4 $ up "12 ~ ~ 12 ~ ~ 12 ~ 13 ~ ~ 13 ~ ~ 13 ~ 14 ~ ~ 14 ~ ~ 14 ~ 15 ~ ~ 15 ~ ~ 15 ~" # s "pluck"
+d1 $ melody |*| up "[1,3,10,12,15,18]"
+
+do
+cps 2
+let rhythm = s "[bd, < ~ sn:3>, hh(1, 2, 1)]"
+let bass = s (slow 3 "bass:3(<7 5 6>*2, 12)") # up (slow 4 "0 1 2 3")
+let fatten p = p |*| up "[0, 7, 12, 19]" |*| gain "0.9"
+d2 $ stack [rhythm, fatten $ bass]
+
+d3 $ stack [(foldEvery [2,3,5] (fast 2) $ n "[0 0 0 0]" # s "<bass bass1>" # n "1 2 3 2 1" |*| up "0 0 0 12" # cut 1 # shape 0.9 # gain "0.8") |*| (slow 8 $ up "0 5 7 -1"), s "[bd*2, [~ sn:3], [~ hh]*2]" |*| gain "0.85" # shape 0.7, (chop 64 $ s "mp3" # speed "-1" # unit "c") |*| gain (scale 0 1 (slow 4 saw)) |*| gain (scale 0 1 (slow 4 saw)) |*| gain (scale 0 1 (slow 4 saw)) |*| gain (scale 0 1 (slow 4 saw)) |*| gain 0.9, stut 4 0.5 1.5 $ slow 8 $ s "cc" # cutoff 3000 # hcutoff 9000 |*| gain 1.5]
+
+
+hush

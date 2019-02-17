@@ -1,0 +1,47 @@
+d1 $ every 4 (|-| speed "0.3") $ every 4 (0.7 <~) $ every 3 (rev) $ s "bd sn arpy*4 cp" # speed "[1 1.25 0.75 -1.5]/3"
+
+d1 silence
+
+d2 $ whenmod 8 6 (rev) $ s "bd*2 arpy*2 cp hh*22"
+
+d2 silence
+
+d3 $ every 2 (rev) $ every 2 (slow 1) $ s "bd hh sn cp"
+
+d3 silence
+
+d4 $ const (sound "arpy*4") $ s "bd sn hh cp"
+
+d4 silence
+
+d5 $ every 4 (const $ s "bd*4 sn*2") $ s "bd sn bass2 sn"
+
+d5 silence
+
+d6 $ whenmod 8 6 (const $ s "arpy(3, 8) bd*4") $ s "bd sn bass2 sn"
+
+d6 silence
+
+d7 $ cat [
+s "bd sn" # vowel "[a o]/2",
+s "casio:0 casio:1 casio:3",
+s "drum:0 drum:1 drum:2 drum:3*4"
+]
+
+d7 silence
+
+d8 $ slowcat [
+s "bd sn" # vowel "[a o]/2",
+s "casio:0 casio:1 casio:3*2",
+s "drum:1 drum:2 drum3 drum4*4"
+]
+
+d8 silence
+
+d9 $ stack [
+s "bd sn",
+s "hh*2 [sn cp] cp future",
+s (samples "arpy*8" (run 16))
+]
+
+d9 silence

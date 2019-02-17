@@ -1,0 +1,35 @@
+d1 $ s "sn*16" # pan (slowcat[sine1, saw1, square1, tri1])
+
+d1 silence
+
+d2 $ s "sn*16" # (speed $ scale 1 2 saw1) |*| (speed $ slow 2 saw1)
+
+d2 silence
+
+d3 $ s "bd*4 sn*4" # speed (slow 4 $ scale (-2) 3 $ saw1)
+
+d3 silence
+
+d4 $ s "hh*32" # cutoff (scale 300 4000 $ slow 10 $ sine1) # resonance "0.3"
+
+d4 silence
+
+d5 $ every 4 (0.25 <~) $ s "arpy*2 cp*2 hh sn"
+
+d5 silence
+
+d6 $ s "[bd sn cp hh]?"
+
+d6 silence
+
+d7 $ degrade $ s "bd*16"
+
+d7 silence
+
+d8 $ degradeBy 0.75 $ s "bd*16"
+
+d8 silence
+
+d9 $ sometimesBy 0.8 (slow 4) $ s "bd*16"
+
+d9 silence 

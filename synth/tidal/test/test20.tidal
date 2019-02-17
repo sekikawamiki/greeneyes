@@ -1,0 +1,115 @@
+--- [superimpose] 重ね合わされた
+--superimpose plays a modified version of a pattern at the same time as the original pattern, resulting in two patterns being played at the same time.
+
+--superimpose は元のパターンと同時にパターンの修正版を再生し、同時に2つのパターンが再生されます。
+
+d1 $ slow 6 $ superimpose (fast 2) $ s "bd sn [cp ht] hh"
+
+d1 silence
+
+d2 $ slow 4 $ superimpose ((# speed "2").(0.125 <~)) $ s "bd sn cp hh"
+
+d2 silence
+
+--- [weave]
+-- weave applies one parameter pattern to an list of other parameter patterns. For example:
+-- weave は、1つのパラメータパターンを他のパラメータパターンのリストに適用します。 例えば：
+
+d3 $ weave 16 (pan sine)[
+s "bd sn cp",
+s "casio casio:1",
+s "[jvbass*2 jvbass:2]/2",
+s "hc*4"
+]
+
+d3 silence
+
+-- What makes this interesting is that the pan sine pattern is offset for each of the given sound patterns. The pan sine is slowed down by the given number of cycles 16, and because the patterns are offset, they seem to chase after each other around the stereo field. Try listening on headphones.
+
+-- You can have it the other way round, and have the effect parameters chasing after each other around a sound parameter, like this:
+
+-- これを興味深いものにするのは、与えられたサウンドパターンごとにpan sine パターンがオフセットされていることです。 pan sine は、与えられたサイクル数16で減速し、パターンがオフセットされているので、ステレオフィールドの周りをお互いに追いかけるように見えます。 ヘッドホンで聞いてみてください。
+
+-- あなたはそれを他の方法で回すことができ、次のように、サウンドパラメータを中心にして効果パラメータを追いかけることができます：
+
+d4 $ weave 32 (s "arpy*8" # n (run 8))[
+vowel "a e i",
+vowel "i [i o] o u",
+vowel "[e o]/3 [i o u]/2",
+speed "1 2 3 5"
+]
+
+d4 silence
+
+-- weave' is similar in that it blends functions at the same time at different amounts over a pattern:
+
+-- 「織り方」は、パターン上の異なる量で同時に機能をブレンドする点で似ています。
+
+d5 $ weave' 3 (s "bd [sn drum:2*2] bd*2 [sn drum:1]")[
+fast 2,( # speed "0.5"),
+chop 32
+]
+
+d5 silence
+
+---[wedge]
+--wedge combines two patterns by squashing two patterns into a single pattern cycle. It takes a ratio as the first argument. The ratio determines what percentage of the pattern cycle is taken up by the first pattern. The second pattern fills in the remainder of the pattern cycle.
+
+--wedge は、2つのパターンを1つのパターンサイクルに縮めて2つのパターンを結合します。 第1引数として比率を取る。 比率は、パターンサイクルの何パーセントが第1のパターンによって占められるかを決定する。 第2のパターンは、パターンサイクルの残りの部分を満たす。
+
+d6 $ slow 6 $ wedge (1/4) (s "bd*2 arpy*3 cp sn*2") (s "odx [feel future]*2 hh hh")
+
+d6 silence
+
+--- [[transitions]]
+-- [anticipate] 予期する
+
+--Build up some tension, culminating in a drop to the new pattern after 8 cycles.
+-- いくつかの緊張を高めて、8サイクル後に新しいパターンに落ち着きます。
+
+--[anticipateIn] 予想通り
+-- same as anticipate though it allows you to specify the number of cycles until dropping to the new pattern, e.g.:
+
+-- 新しいパターンにドロップするまでのサイクル数を指定することはできますが、これは予期したとおりです（例：
+
+d7 $ s "jvbass(3,8)"
+
+t1 (anticipateIn 0) $ s "jvbass(5,8)"
+
+d7 silence
+
+--- [clutch] つかまえる
+-- Degrades the current pattern while undegrading the next.
+-- This is like xfade but not by gain of samples but by randomly removing events from the current pattern and slowly adding back in missing events from the next one.
+
+-- 現在のパターンをデグレードし、次のデモを解除します。
+
+-- これはxfadeに似ていますが、サンプルを得るのではなく、現在のパターンからイベントをランダムに削除し、次のイベントから失われたイベントをゆっくりと追加して戻します。
+
+d8 $ s "bd(3,8)"
+
+t2 clutch $ s "[hh*4, odx(3,8)]"
+
+d8 silence
+
+-- clutch takes two cycles for the transition, essentially this is clutchIn 2.
+
+-- クラッチは移行のために2サイクルを要し、本質的にこれはクラッチイン2である。
+
+--- [clutchIn]
+-- Also degrades the current pattern and undegrades the next. To change the number of cycles the transition takes, you can use clutchIn like so:
+
+--また、現在のパターンを劣化させ、次のパターンをundegradeします。 遷移にかかるサイクル数を変更するには、clutchInを以下のように使用します。
+
+d9 $ s "bd(5,8)"
+
+t3 (clutchIn 1) $ s "[hh*4, odx(3,8)]"
+
+d9 silence
+
+
+hush
+
+-- will take 8 cycles for the transition.
+
+-- 移行のために8サイクルかかります。

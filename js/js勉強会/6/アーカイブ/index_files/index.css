@@ -1,0 +1,521 @@
+@charset "utf-8";
+
+/* ===== Header ===== */
+
+header{
+height:173px;
+}
+
+header h1{
+line-height:1;
+}
+
+.global_nav{
+min-height:88px;
+}
+
+.global_nav li{
+min-height:88px;
+background:url(./bg_gn_border.png) 100% 6px no-repeat;
+}
+
+.global_nav a{
+display:block;
+min-height:33px;
+padding-top:55px;
+_padding-top:22px;
+_padding-bottom:14px;
+}
+
+.global_nav em a{
+background-position:50% -114px;
+}
+
+.global_nav em a:hover,
+.global_nav em a:focus,
+.global_nav a:hover,
+.global_nav a:focus{
+background-position:50% -115px;
+}
+
+.global_nav .service a{background-image:url(./gn_service_icon.png);_background-image:none;	}
+.global_nav .our_work a{background-image:url(./gn_our_work_icon.png);_background-image:none;}
+.global_nav .knowledge a{background-image:url(./gn_knowledge_icon.png);_background-image:none;}
+.global_nav .seminar a{background-image:url(./gn_seminar_icon.png);_background-image:none;}
+.global_nav .news a{background-image:url(./gn_news_icon.png);_background-image:none;}
+.global_nav .company a{background-image:url(./gn_company_icon.png);_background-image:none;}
+.global_nav .careers a{background-image:url(./gn_careers_icon.png);_background-image:none;}
+
+@media screen and (max-width:981px){
+header{
+height:145px;
+}
+.global_nav{
+min-height:60px;
+}
+.global_nav li{
+min-height:60px;
+background:url(./bg_gn_border.png) 100% 0 no-repeat;
+}
+.global_nav a{
+min-height:24px;
+padding-top:36px;
+_padding-top:22px;
+_padding-bottom:14px;
+}
+.global_nav em a{
+background-position:50% -84px;
+}
+
+.global_nav em a:hover,
+.global_nav em a:focus,
+.global_nav a:hover,
+.global_nav a:focus{
+background-position:50% -84px;
+}
+
+.global_nav .service a{background-image:url(./gn_service_icon.png);_background-image:none;	}
+.global_nav .our_work a{background-image:url(./gn_our_work_icon.png);_background-image:none;}
+.global_nav .knowledge a{background-image:url(./gn_knowledge_icon.png);_background-image:none;}
+.global_nav .seminar a{background-image:url(./gn_seminar_icon.png);_background-image:none;}
+.global_nav .news a{background-image:url(./gn_news_icon.png);_background-image:none;}
+.global_nav .company a{background-image:url(./gn_company_icon.png);_background-image:none;}
+.global_nav .careers a{background-image:url(./gn_careers_icon.png);_background-image:none;}
+}
+
+@media screen and (max-width:639px){
+.global_nav li{background-image:none;}
+}
+
+@media screen and (max-width:549px){
+.global_nav a{font-size:12px;}
+}
+
+@media screen and (max-width:449px){
+.global_nav a{font-size:11px;}
+}
+
+@media screen and (max-width:419px){
+header{height:auto;padding-bottom:0;}
+.global_nav{min-height:0;margin:8px -5px 0;padding:8px 0;background:#000;text-align:center;}
+.global_nav li{display:inline;float:none;padding:0 5px 5px 0;min-height:0;width:auto;background:none;white-space:nowrap;line-height:2;}
+.global_nav a{min-height:0;display:inline;padding:2px 5px;color:#fff;font-size:14px;}
+.global_nav .service a{background-image:none;}
+.global_nav .our_work a{background-image:none;}
+.global_nav .knowledge a{background-image:none;}
+.global_nav .seminar a{background-image:none;}
+.global_nav .news a{background-image:none;}
+.global_nav .company a{background-image:none;}
+.global_nav .careers a{background-image:none;}
+}
+
+/* ===== Key Visual ===== */
+
+.kv{
+position:relative;
+width:100%;
+overflow:hidden;
+}
+
+* .kv{
+zoom:1;
+}
+
+*:first-child+html .kv{
+zoom:1;
+}
+
+.kv_view{
+margin:0 auto;
+overflow:hidden;
+position:relative;
+z-index:0;
+-webkit-transform:scale(1);
+-moz-transform:scale(1);
+-ms-transform:scale(1);
+-o-transform:scale(1);
+transform:scale(1);
+-webkit-transform-origin:0 0;
+-moz-transform-origin:0 0;
+-ms-transform-origin:0 0;
+-o-transform-origin:0 0;
+transform-origin:0 0;
+padding-bottom:30px;
+}
+
+*:first-child+html .kv_view{
+zoom:1;
+}
+
+* html .kv_view{
+zoom:1;
+}
+
+.kv_view_items{
+margin:0;
+padding:0;
+position:relative;
+left:0;
+list-style-type:none;
+}
+
+.kv_view_items li{
+display:none;
+}
+
+.kv_view_items .default{
+display:block;
+}
+
+.kv_enabled .kv_view_items li{
+display:block;
+visibility:hidden;
+float:left;
+}
+
+*:first-child+html .kv_enabled .kv_view_items li{
+display:inline;
+zoom:1;
+}
+
+* html .kv_enabled .kv_view_items li{
+display:inline;
+zoom:1;
+}
+
+.kv_animating .kv_view_items li,
+.kv_enabled .kv_view_items .active{
+visibility:visible;
+}
+
+.kv_view_items a{
+display:block;
+position:relative;
+}
+
+.kv_view_items img{
+display:block;
+}
+
+.kv_control{
+display:none;
+}
+
+.kv_enabled .kv_control{
+display:block;
+position:absolute;
+z-index:1;
+margin:0;
+padding:0;
+list-style-type:none;
+right:128px;
+bottom:42px;
+}
+
+.kv_control li{
+float:left;
+position:relative;
+margin:0 8px 0 0;
+-webkit-box-shadow: 0px 0px 5px 3px #ffffff;
+-moz-box-shadow: 0px 0px 5px 3px #ffffff;
+box-shadow: 0px 0px 5px 3px #ffffff; 
+}
+
+.kv_control li:last-child{
+margin:0;
+}
+
+*:first-child+html .kv_control li{
+display:inline;
+zoom:1;
+}
+
+* html .kv_control li{
+display:inline;
+zoom:1;
+}
+
+.kv_control .active{
+top:-10px;
+}
+
+.kv_control a{
+display:block;
+width:46px;
+height:46px;
+background-position:0 0;
+background-repeat:no-repeat;
+}
+
+.kv_control #kv_control_default a{background-image:url(./ctrl_default.png);}
+.kv_control #kv_control_what a{background-image:url(./ctrl_what.png);}
+.kv_control #kv_control_why a{background-image:url(./ctrl_why.png);}
+.kv_control #kv_control_how a{background-image:url(./ctrl_how.png);}
+
+.kv_control a img{
+display:none;
+}
+
+.kv_control .active a img{
+display:block;
+}
+
+@media screen and (max-width:879px){
+.kv_enabled .kv_control .active{
+top:auto;
+}
+}
+
+@media screen and (max-width:848px){
+.kv_enabled .kv_control{
+right:auto;
+left:20px;
+bottom:27px;
+}
+}
+
+@media screen and (max-width:568px){
+.kv_enabled .kv_control{
+display:none;
+}
+}
+
+/* ===== Content ===== */
+
+#content{
+padding:0;
+}
+
+#main_content{
+width:716px;
+}
+
+#local_nav{
+width:224px;
+}
+
+@media screen and (min-width:1281px){
+#main_content{
+width:72.91%;
+}
+
+#local_nav{
+width:22.81%;
+}
+}
+
+@media screen and (max-width:981px){
+#main_content{
+width:72.91%;
+}
+
+#local_nav{
+width:22.81%;
+}
+}
+
+@media screen and (max-width:767px){
+#main_content,
+#local_nav{
+width:auto;
+}
+}
+
+/* ===== Topics ===== */
+
+.list_topic .cat{
+margin:0 0 10px;
+padding:4px 4px 4px 38px;
+background-color:#ebebeb;
+background-position:4px 50%;
+background-repeat:no-repeat;
+border-radius:4px;
+font-weight:bold;
+min-height:24px;
+line-height:24px;
+}
+
+.list_topic .service .cat{background-image:url(./icon_cat_service.png);}
+.list_topic .company .cat{background-image:url(./icon_cat_company.png);}
+.list_topic .knowledge .cat{background-image:url(./icon_cat_knowledge.png);}
+.list_topic .careers .cat{background-image:url(./icon_cat_careers.png);}
+.list_topic .our_work .cat{background-image:url(./icon_cat_our_work.png);}
+.list_topic .news .cat{background-image:url(./icon_cat_news.png);}
+.list_topic .seminar .cat{background-image:url(./icon_cat_seminar.png);}
+
+.list_topic .date{
+margin:0 0 12px;
+font-weight:bold;
+}
+
+.list_topic a img{
+display:block;
+margin:0 auto 10px;
+}
+
+@media screen and (min-width:1281px){
+.lyt_col4_1 .col{
+width:31.2%;
+margin-left:3%;
+}
+}
+
+@media screen and (max-width:981px){
+.lyt_col4_1 .col{
+width:31.2%;
+margin-left:3%;
+}
+}
+
+@media screen and (max-width:568px){
+.lyt_col4_1 .col{
+float:none;
+width:auto;
+margin-left:0;
+}
+}
+
+/* ===== Seminar & Mid Career ===== */
+
+#local_nav .content{
+margin:-16px 0 30px;
+background-color:#ebebeb;
+padding:7px;
+border-radius:4px;
+}
+
+#local_nav .campaign p,
+#local_nav .seminar_info h3,
+#local_nav .mid_career_info p{
+margin:0 0 15px;
+color:#fff;
+background-color:#000;
+font-weight:bold;
+font-size:0.8125em;
+border-radius:4px;
+padding:8px;
+}
+
+#local_nav .seminar_info h3{
+padding:8px 0 8px 50px;
+background:#000 url(./bg_hdg_seminar.png) 14px 50% no-repeat;
+}
+
+.seminar_info ul,
+.mid_career_info ul{
+margin:0 5px;
+border-bottom:1px solid #a9a9a9;
+}
+
+.mid_career_info strong{
+position:relative;
+display:inline-block;
+margin:0 0 0 8px;
+padding:3px 8px 3px 5px;
+border-radius:0 3px 3px 0;
+color:#fff;
+background-color:#c00;
+font-size:10px;
+font-weight:normal;
+line-height:10px;
+vertical-align:top;
+}
+
+.mid_career_info strong:before{
+content:"";
+display:block;
+width:0;
+height:0;
+position:absolute;
+top:0;
+left:-16px;
+border-width:8px;
+border-style:solid;
+border-color:transparent #c00 transparent transparent;
+}
+
+.campaign ul{
+margin:0 5px;
+}
+
+.seminar_info ul li{
+border-top:1px dashed #aeaeae;
+padding:5px 0;
+}
+
+.seminar_info ul li a{
+display:block;
+}
+
+.seminar_info .date{
+font-weight:bold;
+margin:5px 0;
+}
+
+.content .nav_index{
+border-top:1px solid #fff;
+font-size:0.8125em;
+margin:0 5px;
+}
+
+.content .nav_index a{
+display:block;
+padding:10px 0 5px 20px;
+background:url(./arrow02_right.png) 0 50% no-repeat;
+}
+
+#blog_updates .box1{
+padding:10px 10px 0;
+}
+
+#blog_updates .box1:before,
+#blog_updates .box1:after{
+display:none;
+}
+
+#blog_updates ul{
+margin:0;
+}
+
+#blog_updates li{
+padding:10px 0;
+border-top:1px dotted #868686;
+}
+
+#blog_updates li:first-child{
+padding:0 0 10px;
+border:0;
+}
+
+#blog_updates li a{
+margin:0 5px 0 0;
+}
+
+#blog_updates .box1>a{
+display:block;
+padding:10px 0 10px 20px;
+border-top:1px solid #a9a9a9;
+background:url(/arrow02_right.png") 0 50% no-repeat;
+font-size:.8125em;
+}
+
+/* ===== Clear Fix ===== */
+
+.test:after,
+.kv_view_items:after,
+.kv_control:after{
+content:"";
+height:0;
+display:block;
+clear:both;
+}
+
+*:first-child+html .kv_view_items,
+*:first-child+html .kv_control{
+_zoom:1;
+}
+
+* html .kv_view_items,
+* html .kv_control{
+_zoom:1;
+}

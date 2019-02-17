@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+</head>
+<body>
+  <p>https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel ここを参照</p>
+<div class="js-tab">
+  <ul class="tab-list">
+    <li>タブ1</li>
+    <li>タブ2</li>
+    <li>タブ3</li>
+  </ul>
+
+  <div class="tab-panel">
+    パネル1
+  </div>
+  <div class="tab-panel">
+    パネル2
+  </div>
+  <div class="tab-panel">
+    パネル3
+  </div>
+</div>
+
+
+<script>
+  (function(){
+    'use strict';
+
+    var Tab = (function () {
+      var count = 0;
+
+      return function (root, tabs, panels) {
+        var self = this;
+        var clickHandler = function () {
+          self.current(Number(this.getAttribute('data-index')));
+        };
+
+        var keydownHandler = function (e){
+          var key = e.key.replace('Arrow', '');
+
+          if(
+            key === 'Up' ||
+            key === 'Down' ||
+            key === 'Right' ||
+            key === 'Left'
+          ){
+            e.preventDefault();
+
+            if(
+              key === 'Up' ||
+              key === 'Left'
+            ){
+              self.prev();
+
+              return;
+            }
+
+              self.next();
+          }
+        };
+
+        //あってるか確認して、正しいならthisにしまう
+        this.root = root;
+        this.tabs = tabs;
+        this.panels = panels;
+        this.currentIndex = 0;
+
+        //初期化設定
+        this.tabs.forEach(function (tab, idx){
+          tab.id = 'tab-' + count + '-' + idx;
+          tab.tabIndex = -1;
+
+          tab.setAttribute('role', 'tab');
+
+          tab.setAttribute('data-index', idx);
+
+          tab.setAttribute('aria-selected', 'false');
+          tab.setAttribute('aria-controls', 'tabpanel-' + count + '-' + idx);
+        });
+
+        this.tabs[0].parentNode.setAttribute('role', 'tablist');
+
+        this.panels.forEach(function(panel, idx){
+          panel.id = 'tabpanel-' + count + '-' + idx;
+          panel.hidden = true;
+
+          panel.setAttribute('role', 'tabpanel');
+          panel.setAttribute('aria-labelledby', 'tab-' + count + '-' + idx);
+        });
+
+        this.current(this.currentIndex);
+
+        //イベントハンドラの付与
+        this.tabs.forEach(function(tab){
+          tab.addEventListener('keydown', keydownHandler);
+          tab.addEventListener('click', clickHandler);
+        });
+
+        count++; //呼び出された回数を増やす
+      };
+
+    }());
+
+    Tab.prototype.current = function(index){
+      if( !this.tabs[index]){
+        return;
+      }
+
+      this.currentIndex = Number(index);
+
+      //タブの処理
+      this.tabs.forEach(function(tab){
+        tab.tabIndex = -1;
+        tab.setAttribute('aria-selected', 'false');
+      });
+
+      this.tabs[index].tabIndex = 0;
+      this.tabs[index].setAttribute('aria-selected', 'true');
+      this.tabs[index].focus();
+
+      //パネルの処理
+      this.panels.forEach(function(panel){
+        panel.hidden = true;
+      });
+
+      this.panels[index].hidden = false;
+    };
+
+    Tab.prototype.next = function(){
+      this.current([this.currentIndex + 1]);
+    };
+
+    Tab.prototype.prev = function(){
+      this.current([this.currentIndex - 1]);
+    };
+
+    (function(){
+      var root = document.querySelector('.js-tab');
+      var tabs = root.querySelectorAll('.tab-list li');
+      var panels = root.querySelectorAll('.tab-panel');
+
+      window.tab = new Tab(root, tabs, panels);
+    }());
+
+  }());
+</script>
+</body>
+</html>

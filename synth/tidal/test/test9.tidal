@@ -1,0 +1,100 @@
+-- You can manipulate patterns using a wide variety of functions, described below. Some will transform the time structure of the pattern itself (e.g. make slower, faster), change the samples within the pattern (e.g. chop them in to tiny bits) and others will combine two patterns into a new one. You can use layer these functions on top of each other to create weird interference patterns. Have fun with them!
+
+-- 以下で説明するさまざまな機能を使用してパターンを操作できます。 パターン自体の時間構造を変換する（例えば、遅くする、速くする）、パターン内のサンプルを変更する（例えば、小さなビットに切り刻む）、他のパターンは2つのパターンを組み合わせて新しいパターンにする。 これらの機能を重ねて使用することで、奇妙な干渉パターンを作成することができます。 彼らと一緒に楽しんでください！
+
+--- [[Pattern Transformers]] パターントランスフォーマー
+-- Pattern transformers are functions that take a pattern as input and transform it into a new pattern.
+--In the following, functions are shown with their Haskell type and a short description of how they work.
+
+-- パターントランスフォーマは、パターンを入力として新しいパターンに変換する関数です。
+--以下では、関数をHaskell型で示し、その動作方法を簡単に説明しています。
+
+--- [palindrome]
+-- palindrome applies rev to a pattern every other cycle, so that the pattern alternates between forwards and backwards.
+-- パリンドロームは、1サイクルおきにパターンにrevを適用し、パターンが前方と後方の間で交互になるようにします。
+
+d1 $ palindrome $ s "arpy:0 arpy:1 arpy:2 arpy:3"
+
+d1 silence
+
+--- [Mapping over patterns]
+--Sometimes you want to transform all the events inside a pattern, and not the time structure of the pattern itself. For example, if you wanted to pass a sinewave to speed, but wanted the sinewave to go from 0 to 2 rather than from 0 to 1, you could do this:
+
+-- 場合によっては、パターン自体の時間構造ではなく、パターン内のすべてのイベントを変換したい場合もあります。 たとえば、正弦波を通過させたいが、正弦波が0から1にではなく0から2になるようにするには、次のようにします。
+
+d2 $ s "bd*2 [bd [sn sn*2 sn] sn]"
+# speed ((*8) <$> sine)
+
+d2 silence
+
+--The above applies the function (* 2) (which simply means multiply by two), to all the values inside the sine pattern.
+
+-- However since Tidal 0.9, with patterns of numbers you can do arithmetic directly, like this:
+
+
+-- 上記では、関数（* 2）（これは単に2を掛けることを意味します）をサインパターン内のすべての値に適用します。
+-- しかし、Tidal 0.9以来、数字のパターンでは、以下のように直接算術演算を行うことができます：
+
+d3 $ s "bd*2 [bd [sn sn*2 sn] sn]"
+# speed (sine*2)
+
+d3 silence
+
+--There is a gotcha here in that you’ll want to arrange things so the pattern you’re working on is on the left hand side of any arithmetic. For example, this doesn’t work well:
+
+-- ここでは、あなたが作業しているパターンが任意の算術演算の左側にあるように、アレンジする必要があるという点で、ここには問題があります
+-- たとえば、これはうまくいかない：
+
+d4 $ s "bd*2 [bd [sn sn*2 sn] sn]"
+# speed (2*sine)
+
+d4 silence
+
+-- This is because of the rule in Tidal that “the structure comes from the left”, in this example the structure of the sine wave is lost to the structure of the number 2.
+
+-- これは、「構造が左から来る」という潮汐の規則のためです。この例では、正弦波の構造は2番の構造に失われています。
+
+--- [brak]
+--(The above means that brak is a function from patterns of any type, to a pattern of the same type.)
+-- Make a pattern sound a bit like a breakbeat. It does this by every other cycle, squashing the pattern to fit half a cycle, and offsetting it by a quarter of a cycle.
+-- Example: ~~~~ haskell d1 $ brak $ sound “[feel feel:3, hc:3 hc:2 hc:4 ho:1]” ~~~~
+
+-- （上記はBrakがどんなタイプのパターンから同じタイプのパターンへの関数であることを意味します）
+-- パターンはブレイクビートのように聞こえます。 これは、半サイクルに収まるようにパターンを押しつぶし、サイクルの四分の一でそれを相殺する、他のサイクルごとにこれを行います。
+
+d5 $ brak $ s "[feel*2, hc:3 hc:2 hc:4 ho:1]"
+
+d5 silence
+
+--- [degrade]
+-- degrade randomly removes events from a pattern 50% of the time:
+-- 時間の50％のパターンからイベントを無作為に削除します。
+
+d6 $ slow 2 $ degrade $ s "[[[feel:5*8, feel*3] feel:3*8], feel*4]"
+
+d6 silence
+
+-- The shorthand syntax for degrade is a question mark: ?. Using ? will allow you to randomly remove events from a portion of a pattern:
+-- degradeの簡略構文は疑問符です：？ を使用して？ パターンの一部からイベントをランダムに削除することができます：
+
+d7 $ slow 2 $ s "bd ~ sn bd ~ bd? [sn bd?] ~ "
+
+d7 silence
+
+--You can also use ? to randomly remove events from entire sub-patterns:
+-- あなたも使うことができますか？ サブパターン全体からイベントをランダムに削除する：
+
+d8 $ slow 2 $ s "[[[feel:5*8, feel*3] feel:3*8]?, feel*4]"
+
+d8 silence
+
+--- [degradeBy]
+-- Similar to degrade degradeBy allows you to control the percentage of events that are removed. For example, to remove events 90% of the time:
+
+-- degrade degradeByと同様に、削除されるイベントの割合を制御することができます。 たとえば、イベントの90％を削除するには、次のようにします。
+
+d9 $ slow 2 $ degradeBy 0.9 $ s "[[[feel:5*8, feel*3] feel:3*8], feel*4]"
+# accelerate "-6"
+# speed "2"
+
+d9 silence

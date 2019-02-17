@@ -1,0 +1,105 @@
+--- [slow]
+-- Slow down a pattern.
+-- パターンを遅くする。
+
+d1 $ s (slow 2 "bd sn kurt") # slow 3 (vowel "a e o")
+
+d1 silence
+
+-- Slow also accepts numbers between 0 and 1, which causes the pattern to speed up:
+
+-- Slowは0と1の間の数値も受け入れます。これはパターンのスピードを上げます：
+
+d2 $ s (slow 2 "bd sn kurt") # slow 0.25 (vowel "a e o")
+
+d2 silence
+
+--- [smash]
+-- Smash is a combination of spread and striate - it cuts the samples into the given number of bits, and then cuts between playing the loop at different speeds according to the values in the list.
+-- So this:
+
+-- smashはスプレッドとストライトの組み合わせです。サンプルを指定されたビット数にカットし、リスト内の値に従って異なる速度でループを再生することを切ります。
+-- したがって、この：
+
+d3 $ smash 3 [2, 3, 4] $ s "ho ho:2 ho:3 hc"
+
+d3 silence
+
+-- Is a bit like this:
+-- このようなビットです：
+
+d4 $ slow "<2 3 4>" $ striate 3 $ s "arpy:0 arpy:1 arpy:2 arpy:3"
+
+d4 silence
+
+--- [spread]
+-- The spread function allows you to take a pattern transformation which takes a parameter, such as slow, and provide several parameters which are switched between. In other words it ‘spreads’ a function across several values.
+-- Taking a simple high hat loop as an example:
+
+-- スプレッド機能を使用すると、スローなどのパラメータを使用し、複数のパラメータを切り替えるパターン変換を行うことができます。 言い換えれば、いくつかの値に渡って関数を '広げ'ます。
+
+-- 簡単なハイハットループを例にとります：
+
+d5 $ s "ho ho:2 ho:3 hc"
+
+d5 silence
+
+-- We can slow it down by different amounts, such as by a half:
+
+-- 我々は、半分のような異なる量でそれを遅らせることができます：
+
+d6 $ slow 2 $ s "ho ho:2 ho:3 hc"
+
+d6 silence
+
+-- Or by four thirds (i.e. speeding it up by a third; 4/3 means four over three):
+
+-- または4分の3（つまり3分の1のスピードアップ、4/3というのは3分の4のスピードを意味します）：
+
+d7 $ slow (4/3) $ s "ho ho:2 ho:3 hc"
+
+d7 silence
+
+-- But if we use spread, we can make a pattern which alternates between the two speeds:
+
+-- しかし、spread を使用すると、2つのスピードを交互に繰り返すパターンを作ることができます。
+
+d8 $ spread slow [2,4/3] $ s "ho ho:2 ho:3 hc"
+
+d8 silence
+
+-- There is a nice trick you can use here – if you pass ($) as the function to spread values over, you can put functions in the list instead of values. For example:
+
+-- あなたがここで使うことができる素晴らしいテクニックがあります。値を分散させる関数として（$）を渡すと、関数を値の代わりにリストに入れることができます。 例えば：
+
+d9 $ spread ($) [fast 2, rev, slow 2, striate 6, (# speed "0.8")]
+$ s "[bd*2 [~ bd]][sn future]*2 cp jvbass*4"
+
+d9 silence
+
+-- Above, the pattern will have these transforms applied to it, one at a time, per cycle:
+
+-- cycle 1: fast 2 - pattern will increase in speed
+-- cycle 2: rev - pattern will be reversed
+-- cycle 3: slow 2 - pattern will decrease in speed
+-- cycle 4: striate 3 - pattern will be granualized
+-- cycle 5: (# speed "0.8") - pattern samples will be played back more slowly
+-- After (# speed "0.8"), the transforms will repeat and start at fast 2 again.
+
+-- 上記のパターンでは、1サイクルにつき1つずつ、次の変換が適用されます。
+
+-- サイクル1：速い2 - パターンはスピードで増加する
+-- サイクル2：回転パターンは逆転する
+-- サイクル3：遅い2 - パターンの速度が低下します
+-- サイクル4：ストライテート3 - パターンはグラニュラライズされる
+-- サイクル5：（＃スピード "0.8"） - パターンサンプルはよりゆっくりと再生されます
+-- （＃speed "0.8"の後に）変換が繰り返され、再びfast 2で開始します。
+
+-- (The above is difficult to describe, if you don’t understand Haskell, just ignore it and read the below..)
+-- The spread function allows you to take a pattern transformation which takes a parameter, such as slow, and provide several parameters which are switched between. In other words it ‘spreads’ a function across several values.
+
+-- Taking a simple high hat loop as an example:
+
+-- （上記は説明が難しいですが、ハスケルを理解できない場合は、無視して以下を読んでください。）
+-- spread 機能を使用すると、slow などのパラメータを使用し、複数のパラメータを切り替えるパターン変換を行うことができます。 言い換えれば、いくつかの値に渡って関数を '広げ'ます。
+-- 簡単なハイハットループを例にとります：

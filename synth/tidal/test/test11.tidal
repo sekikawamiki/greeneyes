@@ -1,0 +1,86 @@
+--- [linger]
+-- Similar to trunc, in that it truncates a pattern so that only the first fraction of the pattern is played. However unlike trunk, linger repeats that part to fill the remainder of the cycle.
+-- The following example plays only the first three quarters of the pattern. For example this repeats the first quarter, so you only hear a single repeating note:
+
+-- truncと同様に、パターンの最初の部分だけが再生されるように、パターンを切り捨てます。 しかし、トランクとは異なり、リンガーはサイクルの残りの部分を満たすためにその部分を繰り返す。
+-- 次の例では、パターンの最初の3/4だけを再生します。 たとえば、これは第1四半期を繰り返すので、1つのリピート・ノートしか聞こえません。
+
+d1 $ linger 0.25 $ n "0 2 [3 4] 2" # sound "arpy*10"
+
+d1 silence
+
+-- or slightly more interesting, applied only every fourth cycle:
+
+-- または少し面白い、4サイクルごとに適用される：
+
+d2 $ every 4 (linger 0.75) $ n "0 2 [3 4] 2" # s "arpy"
+
+d2 silence
+
+-- or to a chopped-up sample:
+-- または切り刻まれたサンプル：
+
+d3 $ every 4 (linger 0.25) $ loopAt 2 $ chop 8 $ s "breaks125"
+
+d3 silence
+
+-- You can also pattern the first parameter, for example to cycle through three values, one per cycle:
+
+-- たとえば、サイクルごとに3つの値を循環するように、最初のパラメータをパターン化することもできます。
+
+d4 $ every 2 (rev) $ trunc "<1 0.25 0.75>" $ s "arpy:0 arpy:1 [arpy:2 arpy:3] arpy:4"
+
+d4 silence
+
+d5 $ linger "<0.25 0.5 1>" $ loopAt 2 $ chop 8 $ s "breaks125"
+
+d5 silence
+
+--- [Beat rotation]
+-- (The above means that <~ and ~> are functions that are given a time pattern and a pattern of any type, and returns a pattern of the same type.)
+-- Shifts a pattern either forward or backward in time.
+
+-- For example, to shift a pattern by a quarter of a cycle, every fourth cycle:
+
+-- （上記は、<〜と〜>は時間パターンと任意の型のパターンが与えられ、同じ型のパターンを返す関数であることを意味します）。
+-- 時間内に前後にパターンをシフトします。
+
+-- たとえば、4サイクルごとにパターンをシフトするには、4サイクルごとに：
+
+d6 $ slow 4 $ every 4 (0.25 ~>) $ s ("arpy arpy:1 arpy:2 arpy:3")
+
+d6 silence
+
+-- Or to alternate between different shifts:
+
+-- あるいは、異なるシフトを交互にすることができます：
+
+d7 $ slow 4 $ "<0 0.5 0.125>" <~ s ("arpy arpy:1 arpy:2 arpy:3")
+
+d7 silence
+
+--- [scramble]
+-- scramble n p divides the pattern p into n equal parts, and then creates a new pattern each cycle by randomly selecting from the parts. This could also be called “sampling with replacement”. For example,
+
+-- スクランブルn pは、パターンpをn個の等しい部分に分割し、次いで、その部分からランダムに選択することによって各サイクルごとに新しいパターンを作成する。 これは「置換えによるサンプリング」とも呼ばれます。 例えば、
+
+d8 $ s $ scramble 3 "bd sn hh"
+
+d8 silence
+
+-- will sometimes play "sn bd hh" or "hh sn bd", but can also play "bd sn bd" or "hh hh hh", because it can make any random combination of the three parts.
+
+-- 「sn bd hh」または「hh sn bd」を再生することもありますが、「bd sn bd」または「hh hh hh」を再生することもできます。
+
+--- [shuffle]
+-- shuffle n p divides the pattern p into n equal parts, and then creates a new pattern each cycle by selecting a random permutation of those parts. This could also be called “sampling without replacement”. For example,
+
+-- シャッフルn pは、パターンpをn個の等しい部分に分割し、それらの部分のランダム置換を選択することによって各サイクルごとに新しいパターンを作成する。 これは「置換なしでサンプリングする」とも呼ばれます。 例えば、
+
+d9 $ s $ shuffle 3 "bd sn hh"
+
+d9 silence
+
+-- will sometimes play "sn bd hh" or "hh sn bd" or "hh bd sn". But it can never play "hh hh hh", because that isn’t a permutation of the three parts.
+
+-- 「sn bd hh」または「hh sn bd」または「hh bd sn」を再生することがあります。 しかし、それは3つの部分の順列ではないので、 "hh hh hh"を演奏することはできません。

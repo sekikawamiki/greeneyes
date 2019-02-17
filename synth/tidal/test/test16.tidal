@@ -1,0 +1,87 @@
+d1 $ loopAt 16 $ rev $ chop 32 $ s "bev"
+
+d1 silence
+
+--- [striate]
+-- Striate is a kind of granulator, cutting samples into bits in a similar to (chop)[#chop], but the resulting bits are organised differently. For example:
+
+-- Striateは一種のグラニュレータ(造粒機)であり、サンプルを（chop）[＃chop]と同様のビットに切り詰めますが、結果のビットは別々に編成されます。 例えば：
+
+d2 $ slow 4 $ striate 16 $ s "numbers:0 numbers:1 numbers:2 numbers:3"
+
+d2 silence
+
+-- This plays the loop the given number of times, but triggering progressive portions of each sample. So in this case it plays the loop three times, the first time playing the first third of each sample, then the second time playing the second third of each sample, etc.. With the highhat samples in the above example it sounds a bit like reverb, but it isn’t really.
+
+-- Compare this with chop:
+
+-- これはループを一定回数再生しますが、各サンプルのプログレッシブ部分をトリガーします。 この場合、ループを3回演奏し、最初に各サンプルの最初の3分音符を再生し、次に2番目のサンプルを各サンプルの2番目に再生します。上の例のハイハットサンプルでは、 リバーブですが、実際にはありません。
+
+-- これをchop と比較する：
+
+d3 $ slow 4 $ chop 16 $ s "numbers:0 numbers:1 numbers:2 numbers:3"
+
+d3 silence
+
+-- You can hear that the striate version interlaces the cut up bits of samples together, whereas the chop version plays each chopped up sample in turn. Here’s the samples without any granulation, in case that helps understand what’s happening in the above:
+
+-- striate バージョンはサンプルの切り取られたビットを相互に織り交ぜるのに対し、chop バージョンは切り刻まれた各サンプルを交互に再生します。 上記で何が起こっているのかを理解するのに役立つ場合、
+
+d4 $ slow 4 $ s "numbers:0 numbers:1 numbers:2 numbers:3"
+
+d4 silence
+
+-- The striate' function is a variant of striate with an extra parameter, which specifies the length of each part. The striate' function still scans across the sample over a single cycle, but if each bit is longer, it creates a sort of stuttering effect. For example the following will cut the bev sample into 32 parts, but each will be 1/16th of a sample long:
+
+-- striate関数は、各部分の長さを指定する特別なパラメータを持つstriateの変形です。 striate関数は1サイクルにわたってサンプル全体をスキャンしますが、各ビットが長くなると一種の吃音効果が生じます。 たとえば、次の例ではbevサンプルを32分割しますが、それぞれ長さの1/16になります。
+
+d5 $ slow 32 $ striate' 32 (1/16) $ s "bev"
+
+d5 silence
+
+-- Note that striate uses the begin and end parameters internally. This means that if you’re using striate (or striate') you probably shouldn’t also specify begin or end.
+
+-- striate はbegin パラメータとend パラメータを内部的に使用することに注意してください。 つまり、striate（またはstriate '）を使用している場合は、開始または終了も指定しないでください。
+
+--- [striateL]
+-- Just like striate, but also loops each sample chunk a number of times specified in the second argument. The primed version is just like striate', where the loop count is the third argument. For example:
+
+-- striateのように、また、各サンプルチャンクを2番目の引数で指定された回数だけループします。 下塗りされたバージョンは、ストライテートのようになります。ループカウントは3番目の引数です。 例えば：
+
+d6 $ striateL' 1 0.125 8 $ s "arpy sn:2"
+
+d6 silence
+
+-- Like striate, these use the begin and end parameters internally, as well as the loop parameter for these versions.
+
+-- striate と同様に、これらは内部的にbeginおよびendパラメータを使用し、これらのバージョンのループパラメータも使用します。
+
+--- [stut]
+-- Stut applies a type of delay to a pattern. It has three parameters, which could be called depth, feedback and time. Depth is an integer and the others floating point. This adds a bit of echo:
+
+-- Stutはあるタイプの遅延をパターンに適用します。 深度、フィードバック、時間と呼ばれる3つのパラメータがあります。 深さは整数で、その他は浮動小数点です。 これはエコーのビットを追加します：
+
+d7 $ stut 2 0.5 0.2 $ s "arpy arpy:2"
+
+d7 silence
+
+-- The above results in 4 echos, each one 50% quieter than the last, with 1/5th of a cycle between them. It is possible to reverse the echo:
+
+-- 上記の結果は、4エコーであり、各エコーは最後のエコーよりも50％静かであり、その間の1/5サイクルである。 エコーを逆にすることは可能です：
+
+d8 $ stut 4 0.5 (-0.2) $ s "arpy arpy:2"
+
+d8 silence
+
+--- [stut’]
+-- Instead of just decreasing volume to produce echoes, stut' allows to apply a function for each step and overlays the result delayed by the given time.
+
+-- ちょうど音量を小さくしてエコーを生成する代わりに、各ステップに関数を適用して、与えられた時間だけ遅延された結果を重ねることができます。
+
+d9 $ stut' 2(1/3) (# vowel "{a e i u}%2") $ s "arpy arpy:2"
+
+d9 silence
+
+-- In this case there are two overlays delayed by 1/3 of a cycle, where each has the vowel filter applied.
+
+-- この場合、サイクルの1/3だけ遅延された2つのオーバーレイがあり、それぞれには vowel(母音)フィルタが適用されています。

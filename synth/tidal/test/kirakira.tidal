@@ -1,0 +1,45 @@
+bps (180/60)
+
+d1 $ slow 8 $ chop 8 $ every 2 (iter 2) $ jux (rev) $ cat [
+n "[[c5 c5 g5 g5 a5 a5 [g5] ~ ][f5 f5 e5 e5 d5 d5 [c5] ~ ], [[c5, e5, g5] [f5, a5, c5] [f5, a5, c5][g5, b5, d5]]] ",
+n "[[g5 g5 f5 f5 e5 e5 [d5] ~ ][g5 g5 f5 f5 e5 e5 [d5] ~ ], [[c5, e5, g5] [c5, e5, g5] [f5, a5, c5][g5, b5, d5]]] "
+] # s "superchip" # vowel "[a o e i]*3"
+
+d2 $ every 2 (striate 2) $ every 3 (|*| speed "6") $ every 4 (chop 16) $ s "arpy*4" # n (irand 10) # speed "-1 0.8 -0.7 -0.6" # accelerate "-1" # coarse "20 40 60 80"
+
+
+hush
+
+d3 $ n (slow 8 "[[c5 e5 g5 c6]*4 [b4 e5 g5 b5]*4]") # s "superpiano"
+  # velocity "[1.20 0.9 0.8 1][0.7 0.3 0.8 1]"
+
+d3 silence
+
+
+d4 $ jux (# accelerate "-1") $ s "supermandolin*8" # midinote "[80!6 78]/8"
+  # sustain "1 0.25 2 1"
+
+d4 silence
+
+d5 $ midinote (slow 2 $ (run 8) * 1.5 + 50) # s "superchip" # decay "[1 0.2]/4"
+  -- # voice "[0.5 0]/8" -- # sustain (slow 16 $ scale 5 0.5 $ saw1)
+
+d5 silence
+
+d6 $ s "super808 jvbass" # n (irand 10)
+  # voice "0.2" # decay "[2 0.5]/4" # accelerate "-0.1" # sustain "0.5" # speed "[0.5 2]/4"
+
+d6 silence
+
+d7 $ every 16 (density 24 . (|+| midinote "24") . (# sustain "0.3") . (# attack "0.05"))
+  $ s "supercomparator/4" # midinote ((irand 24) + 24)
+  # sustain "8" # attack "0.5" # hold "4" # release "4"
+  # voice "0.5" # resonance "0.9" # lfo "1" # speed "10" # pitch1 "2"
+
+d7 silence
+
+d8 $ s "supernoise/8" # midinote ((irand 10) + 30) # sustain "8"
+ # accelerate "0.5" # voice "0.5" # pitch1 "0.15" # slide "-0.5" # resonance "0.7"
+ # attack "1" # release "20" # room "0.9" # size "0.9" # orbit "1"
+
+ d8 silence

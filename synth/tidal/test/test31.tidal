@@ -1,0 +1,37 @@
+do
+cps(130/120)
+d1 $ s "[bd*2]"
+d2 $ s "[bass:3*4]"
+d3 $ s "[[~ sn:3],[ ~ hh]*2]"
+
+
+do
+cps(130/120)
+d4 $ stack[ s "[bd*2]",
+            s "[bass:3*4]",
+            s "[[~ sn:3],[~ hh]*2]"]
+
+do
+cps(130/120)
+let bassDrum = s "[bd*2]"
+let bassLine = s "[bass:3*4]"
+let percussion = s "[[~ sn:3], [~ hh]*2]"
+d5 $ stack [bassDrum, bassLine, percussion]
+
+
+do
+let houseTempo = 130
+cps (houseTempo/120)
+let bassDrum = s "[bd*2]"
+let bassLine = s "[bass:3]*4"
+let percussion = s "[[~ sn:3], [~ hh]*2]"
+let mainLoop = stack [bassDrum, bassLine, percussion]
+d6 $ mainLoop
+
+d7 $ s "bd" # speed "10"
+
+d8 $ (s "bd" # speed "10")
+
+d9 $ speed "10" # s "bd"
+
+hush

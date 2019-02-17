@@ -1,0 +1,28 @@
+--- [scale]
+--scale will take a pattern which goes from 0 to 1 (like sine), and scale it to a different range - between the first and second arguments. In the below example, scale 1 1.5 shifts the range of sine from 0 - 1 to 1 - 1.5.
+
+--スケールは0から1（正弦波のような）になるパターンをとり、最初の引数と2番目の引数の間の異なる範囲にスケールします。 下の例では、スケール1 1.5は、サインの範囲を0-1から1 - 1.5にシフトします。
+
+d1 $ jux (iter 4) $ s "arpy arpy:2*2" |+| speed (slow 4 $ scale 1 1.5 sine)
+
+d1 silence
+
+-- The above is the equivalent of the following:
+-- 上記は次のものと同等です：
+
+d2 $ jux (iter 4) $ s "arpy arpy:*2" |+| speed (slow 4 $ sine / 0.5 +1)
+
+d2 silence
+
+-- scalex is an exponential version of scale, good to use for frequencies. For example, scale 20 2000 "0.5" will give 1010 - halfway between 20 and 2000. But scalex 20 2000 0.5 will give 200 - halfway between on a logarithmic scale. This usually sounds better if you’re using the numbers as pitch frequencies. Since scalex uses logarithms, don’t try to scale things to zero or less!
+
+-- scalexは指数関数的なスケールで、周波数に適しています。 例えば、scale 20 2000 "0.5"は2010と2000の間の1010を与えます。しかし、scalex 20 2000 0.5は対数スケールの中間に200を与えます。 ピッチ周波数として数字を使用している場合、これは通常よりよく聞こえます。 scalexは対数を使用するので、ゼロ以下にスケーリングしようとしないでください！
+
+-- [up]
+--up changes the speed of playback, but conforming to a 12-tone scale. The example below creates a pattern that plays the sample at 5 semitones, then 3 semitones, above natural pitch.
+
+--再生速度は変わりますが、12トーンスケールに従います。 以下の例では、サンプルを5つの半音、次に3つの半音、自然なピッチよりも上に演奏するパターンを作成します。
+
+d3 $ up "5 3" # s "arpy"
+
+d3 silence

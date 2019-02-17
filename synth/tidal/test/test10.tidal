@@ -1,0 +1,93 @@
+--- [fast]
+--Speed up a pattern. For example, the following will play the sound pattern "bd sn kurt" twice as fast (i.e. so it repeats twice per cycle), and the vowel pattern three times as fast:
+
+-- パターンをスピードアップする。 たとえば、次の例では、音のパターン "bd sn kurt"が2倍の速さで再生されます（つまり、サイクルごとに2回繰り返されます）。また、母音のパターンは3倍速くなります。
+
+d1 $ s (fast 4 "bd sn arpy")
+# fast 3 (vowel "a e o")
+
+d1 silence
+
+-- You can also use this function by its older alias, density.
+-- See also slow.
+-- この関数は、古いエイリアス密度でも使用できます。density も参照してください。
+
+--- [fit]
+-- The fit function takes a pattern of integer numbers, which are used to select values from the given list.What makes this a bit strange is that only a given number of values are selected each cycle. For example:
+
+-- fit関数は、指定されたリストから値を選択するために使用される整数のパターンをとります。 これを少し奇妙にするのは、サイクルごとに指定された数の値だけが選択されるということです。 例えば：
+
+d2 $ slow 2 $ s (fit 3 ["bd", "sn", "arpy", "arpy:1", "casio"] "0 [~ 1] 2 1")
+
+d2 silence
+
+-- The above fits three samples into the pattern, i.e. for the first cycle this will be "bd", "sn" and "arpy", giving the result "bd [~ sn] arpy sn" (note that we start counting at zero, so that 0 picks the first value). The following cycle the next three values in the list will be picked, i.e. "arpy:1", "casio" and "bd", giving the pattern "arpy:1 [~ casio] bd casio" (note that the list wraps round here).
+
+-- 上記の3つのサンプルをパターンにフィットさせます。つまり、最初のサイクルでは "bd"、 "sn"、 "arpy"となり、 "bd [〜sn] arpy sn"という結果が得られます。 0が最初の値を選ぶようにします）。 次のサイクルでは、リスト内の次の3つの値、すなわち「arpy：1」、「casio」および「bd」が選択され、「arpy：1 [〜casio] bd casio」というパターンが与えられます（リストはラウンドラウンド ここに）。
+
+-- fit' is a generalization of fit, where the list is instead constructed by using another integer pattern to slice up a given pattern. The first argument is the number of cycles of that latter pattern to use when slicing. It’s easier to understand this with a few examples:
+
+-- fitは、フィットの一般化です。代わりに、別の整数パターンを使用してリストを作成し、与えられたパターンをスライスします。 第1引数は、スライス時に使用する後者のパターンのサイクル数です。 いくつかの例を挙げて、これを理解することは簡単です。
+
+d3 $ s (fit' 1 2 "0 1" "1 0" "bd sn")
+
+d3 silence
+
+-- So what does this do? The first 1 just tells it to slice up a single cycle of "bd sn". The 2 tells it to select two values each cycle, just like the first argument to fit. The next pattern "0 1" is the “from” pattern which tells it how to slice, which in this case means "0" maps to "bd", and "1" maps to "sn". The next pattern "1 0" is the “to” pattern, which tells it how to rearrange those slices. So the final result is the pattern "sn bd".
+-- A more useful example might be something like
+
+-- では、これはどうしますか？ 最初の1は "bd sn"の1サイクルをスライスするように指示します。 2は、フィットする最初の引数のように、サイクルごとに2つの値を選択するように指示します。 次のパターン「0 1」はスライス方法を指示する「from」パターンであり、この場合「0」は「bd」にマップされ、「1」は「sn」にマップされます。 次のパターン "1 0"は、それらのスライスをどのように再配置するかを指示する "to"パターンです。 最終的な結果はパターン "sn bd"です。
+-- より有用な例は次のようなものかもしれません
+
+d4 $ fit' 1 4 (run 4) "[0 3*2 2 1 0 3*2 2 [1*8]]/2" $ chop 6 $ (s "breaks152" # unit "c")
+
+d4 silence
+
+-- which uses chop to break a single sample into individual pieces, which fit' then puts into a list (using the run 4 pattern) and reassembles according to the complicated integer pattern.
+
+-- chop を使用して1つのサンプルを個々のピースに分割し、fit' させた後に（実行パターンを使用して）リストに入れ、複雑な整数パターンに従って再アセンブリします。
+
+
+--- [iter]
+-- Divides a pattern into a given number of subdivisions, plays the subdivisions in order, but increments the starting subdivision each cycle. The pattern wraps to the first subdivision after the last subdivision is played.
+
+-- パターンを所定の数の細分に分割し、細分を順番に再生するが、各サイクルの開始細分をインクリメントする。 パターンは、最後の細分化が実行された後に最初の細分化にラップされます。
+
+d5 $ iter 4 $ s "bd ff sn cp"
+
+d5 silence
+
+-- 彼は次の4つのサイクルにわたって次のものを生み出します：
+-- bd hh sn cp
+-- hh sn cp bd
+-- sn cp bd hh
+-- cp bd hh sn
+
+--- [jux (and juxBy)]
+-- The jux function creates strange stereo effects, by applying a function to a pattern, but only in the right-hand channel. For example, the following reverses the pattern on the righthand side:
+
+-- jux関数は、パターンに関数を適用することにより、右チャンネルのみにステレオ効果を作成します。 たとえば、次のようにすると右側のパターンが反転します。
+
+d6 $ slow 32 $ jux (rev) $ striate' 32 (1/16) $ s "bev"
+
+d6 silence
+
+-- When passing pattern transforms to functions like jux and every, it’s possible to chain multiple transforms together with ., for example this both reverses and halves the playback speed of the pattern in the righthand channel:
+
+-- パターン変換をjuxやeveryのような関数に渡すと、複数の変換を一緒に連鎖させることができます。たとえば、右チャンネルのパターンの再生スピードを逆転させ、半分にします。
+
+d7 $ slow 32 $ jux ((# speed "0.5") . rev) $ striate' 32 (1/16) $ s "bev"
+
+d7 silence
+
+-- With jux, the original and effected versions of the pattern are panned hard left and right (i.e., panned at 0 and 1). This can be a bit much, especially when listening on headphones. The variant juxBy has an additional parameter, which brings the channel closer to the centre. For example:
+
+-- juxでは、元のパターンと影響を受けたパターンが左右にパンされます（0と1でパンされます）。 これは、特にヘッドフォンを聴いているときに、少し多いことがあります。 バリアントjuxByには、チャネルを中心に近づける追加パラメータがあります。 例えば：
+
+d8 $ juxBy 0.5 (fast 2) $ s "bd cp"
+
+d8 silence
+
+-- In the above, the two versions of the pattern would be panned at 0.25 and 0.75, rather than 0 and 1.
+
+-- 上記において、パターンの2つのバージョンは、0と1ではなく、0.25と0.75でパンされます。

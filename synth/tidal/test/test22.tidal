@@ -1,0 +1,91 @@
+--- [coarse]
+--fake-resampling, a pattern of numbers for lowering the sample rate, i.e. 1 for original 2 for half, 3 for a third and so on.
+
+--偽リサンプリング、サンプルレートを下げるための数字のパターン、すなわち、元の2つの半分のための1つ、3つめの3のような数のパターンなどである。
+
+d1 $ s "bd sn arpy hh cp" # coarse "4 100"
+
+d1 silence
+
+--- [crush]
+--bit crushing, a pattern of numbers from 1 for drastic reduction in bit-depth to 16 for barely no reduction.
+
+--bit-crushing、1からビット深度の劇的な減少のパターンから16までのパターン。
+
+d2 $ s "feel*4 jvbass:2" # crush "7"
+
+d2 silence
+
+--- [cut]
+--In the style of classic drum-machines, cut will stop a playing sample as soon as another samples with in same cutgroup is to be played.
+
+--An example would be an open hi-hat followed by a closed one, essentially muting the open.
+
+--古典的なドラムマシンのスタイルでは、カットは、同じカットグループの別のサンプルが再生されるとすぐに再生サンプルを停止します。
+--例としては、開いたハイハットに続いて閉じたものがあり、本質的にオープンをミュートします。
+
+d3 $ stack [
+s "bd",
+s "~ [ ~ [ho:2 hc/2]]" # cut "1"
+]
+
+d3 silence
+
+-- This will mute the open hi-hat every second cycle when the closed one is played.
+--Using cut with negative values will only cut the same sample. This is useful to cut very long samples
+
+-- クローズされたハイハットを2回おきに押すと、ハイハットがミュートされます。
+--負の値でカットを使用すると、同じサンプルだけがカットされます。 非常に長いサンプルをカットするのに便利です
+
+d4 $ s "[bev,[ho:3](3,8)]" # cut "1"
+
+d4 silence
+
+-- Using cut "0" is effectively no cutgroup.
+
+-- カット "0"を使用すると効果的にカットグループはありません。
+
+---[cutoff]
+--a pattern of numbers. In SuperDirt, this is in Hz (try a range between 0 and 6000). In classic dirt, it is from 0 to 1. Applies the cutoff frequency of the low-pass filter. Has the shorthand form lpf.
+
+--数字のパターン。 SuperDirtでは、これはHz単位です（0〜6000の範囲で試してください）。 古典的な汚れでは、0から1までです。ローパスフィルタのカットオフ周波数を適用します。 簡体字はlpf形式です。
+
+d5 $ s "~ bd feel ~ hh" # cutoff "200 600"
+
+d5 silence
+
+--- [delay]
+--a pattern of numbers that set the initial level of the delay signal. I.e. a value of one means the first echo will be as loud as the original sound.
+
+-- 遅延信号の初期レベルを設定する数字のパターン。 i, e, a 値は、最初のエコーが元の音と同じくらい大きくなることを意味します。
+
+d6 $ s "bd(3,8) jvbass*2" # delay "10"
+
+d6 silence
+
+---[delayfeedback]
+--a pattern of numbers from 0 to 1. Sets the amount of delay feedback.
+
+--0から1までの数字のパターンです。遅延フィードバックの量を設定します。
+
+d7 $ s "future*6 cp arpy" # delayfeedback "0.75 1 0.25"
+
+d7 silence
+
+-- [delaytime]
+--a pattern of numbers from 0 to 1. Sets the length of the delay.
+
+--0から1までの数字のパターンです。遅延の長さを設定します。
+
+d8 $ s "casio [bd*2 sn feel]" # delaytime "0.5" # delay "1"
+
+d8 silence
+
+---[end]
+--the same as begin, but cuts the end off samples, shortening them; e.g. 0.75 to cut off the last quarter of each sample.
+
+-- begin と同じですが、サンプルを短くして短くします。 例えば 0.75で各サンプルの最後の四分の一を切り捨てる。
+
+d9 $ s "bd*3(3,8) future*3 can arpy sn" # end "0.75"
+
+d9 silence

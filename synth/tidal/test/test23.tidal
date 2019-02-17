@@ -1,0 +1,111 @@
+--- [gain]
+--a pattern of numbers that specify volume. Values less than 1 make the sound quieter. Values greater than 1 make the sound louder.
+
+--ボリュームを指定する数字のパターン。 値が1未満の場合、音が静かになります。 1より大きい値は音量を大きくします。
+
+d1 $ s "bd*4 hh ~ bd" # gain "2 -0.3 3 0.8"
+
+d1 silence
+
+---[accelerate 加速する]
+--- a pattern of numbers that speed up (or slow down) samples while they play.
+
+-- 演奏中にサンプルの速度を上げる（または遅くする）パターンです。
+
+d2 $ s "~ bd jvbass*2 [sn cp]" # accelerate "6"
+
+d2 silence
+
+---[hresonance]不協和
+---a pattern of numbers from 0 to 1. Applies the resonance of the high-pass filter. Has the shorthand form hpq.
+
+--0から1までの数字のパターンハイパスフィルタの共振を適用します。 hpqという略式形式をしています。
+
+d3 $ s "feel*3 [sn cp] arpy" # hresonance "0.66"
+
+d3 silence
+
+---[legato]
+--Controls the length of the sound (called sustain) relative to its “space” in the pattern - the time from the beginning of one sound in the pattern to the beginning of the next - also known as the “inter-onset time”1.
+--legato "1" means the sound will play for the duration of its “space” and then stop playing. For example
+
+--パターンの1つの音の開始から次の音の開始までの時間 - 「開始時間」とも呼ばれる、パターン内のその「スペース」に対するサウンドの長さ（サステインと呼ばれます）を制御します。
+
+--legato "1"は、サウンドがその "スペース"の持続時間の間再生され、次に再生を停止することを意味する。 例えば
+
+d4 $ s "[[rave rave] rave]" # legato "2"
+
+d4 silence
+
+-- will play the first two sounds for 1/4 of a cycle, and the third for 1/2 of a cycle. Other values of legato will multiply that duration, such that values greater than 1 will cause the sounds to overlap, and values less than one will cause the sounds to end before the next one begins.
+-- For softsynths, leaving legato unspecified causes SuperDirt to default to legato "1".
+-- For samples, when leaving legato unspecified SuperDirt will play the sample for its full duration, whatever that might be.
+
+--最初の2つの音は1/4の周期で再生され、3番目の音は1/2の周期で再生されます。 レガートの他の値は、1より大きい値は音が重なり、1より小さい値は次の音が始まる前に音を終了させるように、その持続時間を掛けます。
+
+-- softsynthの場合、レガートを指定しないと、SuperDirtはデフォルトのレガート「1」になります。
+
+-- サンプルについては、レガートを離れるときに、指定されていないSuperDirtがサンプルをその全期間にわたって再生します。
+
+--See also the sustain parameter.
+--sound), but you can use the delta parameter to override this and control it directly. The user-provided delta will then be multiplied by legato (if provided) as normal.
+
+--sustain パラメータも参照してください。
+--デルタパラメータを使用してこれをオーバーライドし、直接制御することができます。 ユーザー提供のデルタは通常のようにレガート（提供されている場合）で乗算されます。
+
+---[loop]
+--loops the sample (from begin to end) the specified number of times.
+
+--指定された回数だけサンプルをループします（最初から最後まで）。
+
+d5 $ s "bd sn feel" # loop "0 2 3"
+
+d5 silence
+
+---[nudge]
+--Pushes things forward (or backwards within built-in latency) in time. Allows for nice things like swing feeling:
+
+-- 時間内に前方に（または組み込みの待ち時間内で後方に）プッシュします。 スイング感覚のような素敵なものを許可します：
+
+d6 $ stack [
+s "bd bd/4",
+s "hh(5,8)"
+] # nudge "[0 0.04]*4"
+
+d6 silence
+
+--Low values will give a more human feeling, high values might result in quite the contrary.
+
+--低い値はより人間的な感情を与え、高い値はかなり反対になるかもしれません。
+
+---[pan]
+--a pattern of numbers between 0 and 1, from left to right (assuming stereo)
+
+--0と1の間の数字のパターン、左から右へ（ステレオと仮定して）
+
+d7 $ s "arpy*4 sn bd" # pan "0.5"
+
+d7 silence
+
+---[resonance 共振]
+-- pattern of numbers from 0 to 1. Applies the resonance of the low-pass filter. Has the shorthand form lpq.
+
+--0から1までの数字のパターン。ローパスフィルタの共振を適用します。 簡体字はlpq形式です。
+
+d8 $ s "future [sn*2 jvbass] sn" # resonance "1"
+
+d8 silence
+
+---[room and size]
+---Both room and size are patterns of numbers, representing the amount of input into the reverb unit, and notional size of the room respectively. These are only available in SuperDirt (not classic dirt) and is a fully working but experimental feature which may change in the future.
+
+-- room とsize はともに、リバーブユニットへの入力量とルームの想定サイズを表す数字のパターンです。 これらはSuperDirt（古典的な汚れではない）でのみ利用可能であり、将来的には変更される可能性のある実験的な機能です。
+
+---[shape]
+--wave shaping distortion, a pattern of numbers from 0 for no distortion up to 1 for loads of distortion
+
+--波形整形歪み、無歪みの場合の0から歪みの負荷の場合の1までのパターンのパターン
+
+d9 $ s "arpy rm bd*2" # shape "0.99"
+
+d9 silence

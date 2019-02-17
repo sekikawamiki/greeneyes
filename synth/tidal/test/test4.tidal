@@ -1,0 +1,25 @@
+cps (50/60)
+
+d1 $ s "arpy*10" # n (slow 0.8 $ rand)
+
+d1 silence
+
+d2 $ const (s "arpy*4") $ s "bd sn cp hh"
+
+d2 silence
+
+d3 $ every 8 (rev) $ every 4 (slow 2) $ s "bd cn cp hh"
+
+d3 silence
+
+d4 $ whenmod 16 14 (# speed "2") $ s "bd arpy*2 cp bass2"
+
+d4 silence
+
+d5 $ cat [s "bd sn" # vowel "a o/2", s "casio casio:2 casio:2*2"]
+
+d5 silence
+
+d6 $ sound $ samples "arpy*8" (run 8) # speed "2" # cut "1"
+
+d6 silence

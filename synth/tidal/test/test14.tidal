@@ -1,0 +1,74 @@
+--- [trunc]
+-- Truncates a pattern so that only a fraction of the pattern is played. The following example plays only the first three quarters of the pattern:
+
+--  パターンの一部だけが再生されるようにパターンを切り詰めます。 次の例では、パターンの最初の3/4だけを再生します。
+
+d1 $ trunc 0.75 $ s "bd sn*2 cp hh*4 arpy bd*2 cp bd*2"
+
+d1 silence
+
+-- You can also pattern the first parameter, for example to cycle through three values, one per cycle:
+
+-- たとえば、サイクルごとに3つの値を循環するように、最初のパラメータをパターン化することもできます。
+
+d2 $ trunc "<0.75 0.25 1>" $ s "bd sn:2 [mt rs] hc"
+
+d2 silence
+
+-- See also linger.
+--linger も参照してください。
+
+--- [zoom]
+-- Plays a portion of a pattern, specified by the beginning and end of a time span (known as an ‘arc’). The new resulting pattern is played over the time period of the original pattern:
+
+-- 時間軸の始まりと終わりで指定されるパターンの一部を再生します（ '円弧'として知られています）。 新しい結果のパターンは、元のパターンの期間にわたって再生されます。
+
+d3 $ slow 4 $ zoom (0.25, 0.75) $ s "bd*2 hh*3 [sn bd]*3 drum"
+
+d3 silence
+
+-- In the pattern above, zoom is used with an arc from 25% to 75%. It is equivalent to this pattern:
+
+-- 上記のパターンでは、ズームは25％から75％の円弧で使用されます。 これは、次のパターンと同じです。
+
+d4 $ s "hh*3 [sn bd]*3"
+
+d4 silence
+
+-- Here’s an example of it being used with a conditional:
+
+-- 条件付きで使用されている例を次に示します。
+
+d5 $ slow 2 $ every 4 (zoom (0.25, 0.75)) $ s "bd*2 hh*3 [sn bd]*3 drum"
+
+d5 silence
+
+--- [[Sample Transformers]]  サンプルトランスフォーマー
+-- The following functions manipulate each sample within a pattern, some granularize them, others echo.
+
+-- 次の関数は、パターン内の各サンプルを操作し、いくつかのサンプルを細分化し、別のサンプルをエコーします。
+
+--- [loopAt]
+-- loopAt makes sample fit the given number of cycles. Internally, it works by setting the unit parameter to “c”, changing the playback speed of the sample with the speed parameter, and setting setting the density of the pattern to match.
+
+-- loopAt はサンプルを与えられたサイクル数に適合させます。 内部的には、unitパラメーターを "c"に設定し、サンプルの再生速度をspeedパラメーターで変更し、一致するパターンの density  (密度)を設定することで動作します。
+
+d6 $ loopAt 4 $ s "breaks125"
+
+d6 silence
+
+-- It’s a good idea to use this in conjuction with chop, so the break is chopped into pieces and you don’t have to wait for the whole sample to start/stop.
+
+-- これをchop と組み合わせて使用することは良い考えです。そのため、ブレークは細かく分割され、サンプル全体が開始/停止するのを待つ必要はありません。
+
+d7 $ loopAt 2 $ chop 8 $ s "breaks125"
+
+d7 silence
+
+-- Like all tidal functions, you can mess about with this considerably. The below example shows how you can supply a pattern of cycle counts to loopAt:
+
+-- すべての干満関数と同様に、これをかなり混乱させることができます。 以下の例は、loopAtにサイクル数のパターンを与える方法を示しています。
+
+d8 $ juxBy 0.6 (|*| speed "4") $ loopAt "<2 8 6 8>" $ chop 12 $ s "fm:14"
+
+d8 silence

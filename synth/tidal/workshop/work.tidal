@@ -1,0 +1,198 @@
+-- $ 一つのパラメータで関数を利用する ()と同じ働きをする　
+d1 $ sound "bd sn"　ふつう
+
+d1 (sound "bd sd")　動く　（）を使うと纏めてくれて一つに見えるんでちゃんと動く
+
+d1 sound "bd sn" 動かない ２つの引数に見えてしまう
+
+-- d1 も関数
+-- :t d1
+
+d1 $ (sound "bd sn") # (speed 2)
+
+d1 $ (speed 2) # (sound "bd sn")
+
+--左側のパターンが右側に送られる
+
+d1 $ (speed "2 4 5 6 3 3") # (sound "bd sn")
+
+d1 $ (speed "[2 4 3 2 6 4 3 2, 0.5 0.75]")
+    # (sound "bd sn clap")
+
+d1 $ every 2 rev $ every 2 (fast 2) $ sound "bd sn*2"
+
+d1 $ every 2 (rev . chop 8 . fast 4) $ sound "bd sn*2"
+
+--every を２回かくのはめんどいのでまとめることができる
+
+d1 $ every 2 $ rev . chop 8 . fast 4 $ sound "bd sn*2"
+
+-- 上は動かない　$の右側が単独だと動かない
+
+d1 $ every 2 (rev . chop 8 . fast 4) (sound "bd sn*2")
+
+d1 $ every 2 (rev . chop 8 . fast 4) $ sound "bd sn*2"
+
+-- :t fast 4
+-- :t chop 8
+-- :t
+
+d1 $ speed "1 2 3" # speed "2" # s "arpy"
+
+d1 $ speed "1 2 3" |+| speed "2" # s "arpy"
+
+--1.0 の機能
+
+d1 $ sound "bd sn" # cps "<2 1 4>"
+
+d1 $ (chop 16 $ s "drum:2  drum") # cps (slow 8 $ sine + 1)
+
+ --cps に0 を使うと壊れる
+
+d1 $ s "bd sn" |> speed "1 2 3"
+
+d1 $ s "bd sn" >| speed "1 2 3"
+--これは動く　右のパターンを取る
+
+d1 $ speed "1 2" >| speed "4 5 6" # sound "bd sn"
+
+d1 $ speed "1 2" |> speed "4 5 6" # sound "bd sn"
+
+d1 $ speed "1 2" <| speed "4 5 6" # sound "bd sn"
+
+--構造が右側から来る　値は左からくる
+
+d1 $ speed "1 2" |<| speed "4 5 6" # sound "bd sn"
+
+d1 $ speed "1 2" |+| speed "4 5 6" # sound "bd sn"
+
+d1 $ speed "1 2" + speed "4 5 6" # sound "bd sn"
+
+d1 $ speed ("1 2" + "4 5 6") # sound "bd sn"
+
+-- "2 3" + "4 5 6" :: "6 [7 8] 9"
+
+-- "2 3" + "4 5 6" :: Pattern Int
+
+d1 $ n ("2 3" + "4 5 6") + s "bd sn"
+
+--consoleに表示される
+n ("2 3" + "4 5 6") + s "bd sn"
+
+d1 $ sound "bd [sn cp]" |>| speed "2 3 4*2" |+| speed "1 2 0.5*3" |* speed (slow 8 sine)
+-- sineはイベントの数が多くなる？
+
+d1 $ off 0.25 (|* speed 2) $ sound "gabba(3, 8)"
+
+once $ cps "1"
+
+once $ (chop 16 $ s "airhorn") # speed sine
+
+d1 $ sound "cp" # speed (cF 2 "33")
+
+d1 $ fast (iter "<4 3>" "1 [2 4]") $ sound "bd*8" # speed 2
+
+d1 $ sound "<bd cp> sn:2" # speed "<1 2 3>"
+
+d1 $ every "[3 4]" (fast 2) $ sound "bd*8"
+
+d1 $ compress (0, 0.5) $ sound "bd*8"
+
+d1 $ compress (0, 1/2) $ sound "bd*8"
+
+d1 $ compress (1/3, 1) $ sound "cp*4" # speed (sine + 1)
+-- compress そんなに使われていない
+
+d1 $ compress (0.75, 1) $ sound "bd*8"
+
+d1 $ slow 2 $ stack[
+compress (0, 1/3) $ iter 4 $ n "0 .. 3" # sound "sn:3" # legato 1 # speed 1,
+compress (1/3, 1) $ fast "<1 0.5>" ] # sound "cp:4(3,8) cp:2*2" # speed 1.5 # crush 3
+]
+
+xfade "1" $ fast 2 $ sound "sn(3,8,5)"
+
+--repeat random value
+d1 $ struct "x*8?" $ s "kicklinn"
+
+d1 $ repeatCycles 4 $ struct "x*8?" $ s "arpy" +| note (irand 16)
+
+d1 $ loopFirst $ struct "x*8?" $ s "kicklinn" # speed 2 # room 0.1 # sz 0.5
+
+d1 $ sound "supermandolin*8" # n (
+  choose [0,5,7,12]
+  ) # gain 1.2 # legato 2
+
+-- you can give weights with "wchoose"
+d1 $ sound "supermandolin*8" # n (
+  wchoose [(1,0.1),(5,0.1),(7,0.1),(12,0.7)]
+  ) # gain 1.2 # legato 2
+
+d1 $ sound (choose["bd", "snare"]) +| gain 1.2 # legato 2
+
+d1 $ sound (discretise 8 $ choose["bd", "snare"]) # gain 1.2 # legato 2
+
+--x はどうでもいい　docs catsとかでも
+d1 $ sound (struct "x(3,8) x*2" $ choose["bd", "snare"]) # gain 1.2 # legato 2
+
+d1 $ jux (rev . (0.25 <~)) $ n (scan 8) # sound "sn" # speed 2
+
+d1 $ n (scan 4) # sound "alphabet" # speed 1
+
+d1 $ jux (rev . (4.25 <~)) $ n (scan 8) # sound "sn" # speed 2
+
+d1 $ n (run 8) # sound "drum"
+
+d1 $ n ("0 .. 7") # sound "drum"
+
+d1 $ slow 2 $ n (fit 4[0,5,7,24, -5] "0 ~ [ ~ 4] 3") # s "superzow" # lpf (scale 100 1000 sine) # lpq 0.2 # legato 0.5 # room 0.3 # sz 0.3
+
+d1 $ jux ((|+ n 12) . rev) $ off 0.25 ((# s "superpiano") .arpg . struct "x(3,8)") $ n (off (1/16)(+12)) $ off 0.125 (+7) $ fit 3 [0,5,7,24] "0 [1 0] [~ 3] 1") # s "supermandolin" # legato 1 |- n 12
+
+d1 $ off 0.25((|+ n 24) . (# "supermandlin" # gain 0.9 # legato 0.5))
+
+d1 $ n (off "<0.25 0.5>" (+12) $ off 0.125 (+7) "<c(3,8) e(3,8,2) f(3,8,4) g*2>") # s "superpiano"
+
+d1 $ s "drum(<3 5>,8,<0 2>)"
+
+do d1 $ sound "bd sn"
+   d2 $ sound "cp"
+
+
+d1 $ stack [n "c a f e" # s "volcafm", cc "41:4" # s "volcafm"]
+
+let pats =
+  [
+  ("a", stack[n " c4 c5 g4"] # s "superpiano" # gain "0.7")
+  ]]
+
+--orbits
+
+d1 $ s "bd sn:2" # room 0.4 # sz 0.9
+
+d2 $ s "arpy*4"
+
+--エフェクトが消える
+
+d1 $ s "bd sn:2"
+
+d2 $ s "arpy*4" #room 0.4 # sz saw
+
+hush
+
+d1 $ "<0 1 2 3>" # s "alpabet"
+
+-- aから始まらない
+
+cps(-1)　-- 通常はこれで大丈夫
+
+-- 1.0からは　0.04秒遅れる　
+
+-- BootTidal.hs 7 行目にかいてある設定
+
+
+
+
+-- #　パターンを一緒にしたり　＃（ハッシュはtidalのドキュメンテーションで探す）
+
+-- .

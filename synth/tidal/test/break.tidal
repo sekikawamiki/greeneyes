@@ -1,0 +1,26 @@
+cps (200 / 120)
+
+d1 $ sound (samples "amencutup*8" (irand 10))
+    # crush 4
+    # cut 2
+    # up (rand * 10)
+
+d2
+    $ s (samples "arpy" (irand 22))
+    # up 2
+    # gain 1.1
+
+d3 $ s "gabba gabba"
+# up 5
+# crush 2
+# gain 0.8
+
+d1 silence
+
+d2 silence
+
+d3 silence
+
+d4 $ s "bd sn cp hh"
+
+d4 silence

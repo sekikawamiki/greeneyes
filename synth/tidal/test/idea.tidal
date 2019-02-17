@@ -1,0 +1,14 @@
+d1 $ s "bass*4 hh*4"
+# gain (every 4 (rev) $ "[1 -0.4 -2.5 1.5][0.6]")
+
+hush
+
+d2 $ every 3 (|-| up "3") $ every 2 (|+| up "2") $ s "arpy*4" |=| up (run 4)
+
+d4 $ up "0 0*2 0*4 1" # s "[ ~ arpy:2,bass2, hh]"
+
+d4 silence
+
+d5 $ s "gabbalouder*4" # gain "0.7"
+
+d5 silence

@@ -1,0 +1,30 @@
+d1 $ jux (iter 8) $ s "bd*2 [cp*2 hh*2]"
+
+d2 $ whenmod 8 6 (fast 2) $ s "bd*2 [cp*2 hc*2]"
+
+d3 $ ofen (rev) $ s "bd*2 [cp*2 hh*2]"
+
+d4
+$ sometimesBy 0.2 (rev)
+$ whenmod 8 6 (slow 2)
+$ every 4 (0.125 ~>)
+$ ofen (jux ( iter 4))
+$ s "bd*2 [cp*2 hh*2]"
+
+
+d5
+$ every 4 (0.25 ~>)
+$ jux (iter 2)
+$ s "tabla*2 [cp*2 hh*2]"
+# pan "0.9 [0.1 0.7]"
+# delay "0.3"
+# delaytime "0.25"
+# delayfeedback "0.8"
+# lpf "800 8000 800 15000"
+# resonance "0.1 0.3 0.2 0.4"
+# shape "0.7"
+# vowel "u a i e"
+
+d6 $ s "bd(3,8,1)"
+
+hush

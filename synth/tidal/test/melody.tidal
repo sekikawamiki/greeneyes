@@ -1,0 +1,21 @@
+cps (40/60)
+
+d1
+$ s "amencutup*8"
+# n (irand 10)
+# up (rand * 10)
+# crush 5.5
+
+d1 silence
+
+d2 $ slow 1 $ s "amencutup:0 amencutup:1 amencutup:2(1,3) amencutup:2(1,3,1) amencutup:2(1,3,1) amencutup(2,6) amencutup:2(1,3) amencutup:2(1,3,1)"
+
+d2 silence
+
+d3 $ slow 1 $ s "amencutup:0 amencutup:1 amencutup:2(1,3) amencutup:2(1,3,1) amencutup:2(1,3,1) amencutup ~ amencutup:2"
+
+d3 silence
+
+d4 $ slow 1 $ s "amencutup:2(1,3,1) amencutup(2,7) amencutup:2(1,3) amencutup:2(1,3,1) amencutup:2(1,3,1) amencutup ~ amencutup:2"
+
+d4 silence

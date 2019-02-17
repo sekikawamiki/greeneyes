@@ -1,0 +1,99 @@
+--- [cat]
+-- cat, (also known as slowcat) concatenates a list of patterns into a new pattern; each pattern in the list will maintain its original duration. cat is similar to fastcat, except that pattern lengths are not changed. Examples:
+
+-- cat（slowcatとも呼ばれる）は、パターンのリストを新しいパターンに連結します。 リストの各パターンは元の持続時間を維持します。 catはfastcatと似ていますが、パターンの長さは変更されません。 例：
+
+d1 $ cat [
+s "bd*2 sn",
+s "arpy jvbass*2",
+s "drum*2",
+s "ht mt"
+]
+
+d1 silence
+
+--- [fastcat]
+-- fastcat concatenates a list of patterns into a new pattern. The new pattern’s length will be a single cycle. Note that the more patterns you add to the list, the faster each pattern will be played so that all patterns can fit into a single cycle. Examples:
+
+-- fastcatは、パターンのリストを新しいパターンに連結します。 新しいパターンの長さは1サイクルになります。 リストに追加するパターンが多いほど、各パターンがより速く再生され、すべてのパターンが1つのサイクルに収まることに注意してください。 例：
+
+d2 $ fastcat [
+s "bd*2 sn",
+s "arpy jvbass*2",
+s "drum*2",
+s "ht mt"
+]
+
+d2 silence
+
+--- interlace
+-- (A function that takes two ParamPatterns, and blends them together into a new ParamPattern. A ParamPattern is basically a pattern of messages to a synthesiser.)
+-- Shifts between the two given patterns, using distortion.
+
+-- Example:
+
+-- 2つのParamPatternをとり、それらを一緒に新しいParamPatternにブレンドする関数。ParamPatternは基本的にシンセサイザーへのメッセージのパターンです）。
+-- 歪みを使用して、2つの与えられたパターンの間を移動します。
+
+d3 $ slow 4 $ interlace (s "bd sn kurt") (every 3 rev $ s "cp hh")
+
+d3 silence
+
+--- [randcat]
+-- randcat is similar to slowcat, but rather than playing the given patterns in order, picks them at random.
+
+-- randcatはslowcatと似ていますが、与えられたパターンを順番に再生するのではなく、ランダムに選択します。
+
+d4 $ randcat [s "bd*2 sn", s "jvbass*3", s "drum*2", s "ht mt"]
+
+d4 silence
+
+--- [append]
+-- append combines two patterns into a new pattern, so that the events of the second pattern are appended to those of the first pattern, within a single cycle.
+
+-- appendは2つのパターンを新しいパターンに結合し、第2のパターンのイベントが第1のパターンのイベントに追加されるようにします。
+
+d5 $ append (s "bd*2 sn") ( s "arpy jvbass*2")
+
+d5 silence
+
+-- append' does the same as append, but over two cycles, so that the cycles alternate between the two patterns.
+
+-- append 'はappendと同じですが、2つのサイクルにわたって、サイクルが2つのパターンの間で交互になるようにします。
+
+d6 $ append' (s "bd*2 sn")(s "arpy jvbass*2")
+
+d6 silence
+
+--- [spin]
+--spin will “spin” a layer up a pattern the given number of times, with each successive layer offset in time by an additional 1/n of a cycle, and panned by an additional 1/n. The result is a pattern that seems to spin around. This function works best on multichannel systems.
+
+-- スピンは、ある1つの層をパターンの上に所定の回数だけスピンさせ、各連続する層は、サイクルの1 / nを時間的にずらし、追加の1 / nでパンする。 結果は回りそうなパターンです。 この機能は、マルチチャンネルシステムで最適に機能します。
+
+d7 $ slow 6 $ spin 3 $ s "drum*3 tabla:4 [arpy:2 ~ arpy] [can:2 can:3]"
+
+d7 silence
+
+--- [stack]
+-- stack takes a list of patterns and combines them into a new pattern by playing all of the patterns in the list simultaneously.
+
+-- スタックは、リストのパターンをすべて取り込み、リスト内のすべてのパターンを同時に再生することによって、それらを新しいパターンに結合します。
+
+d8 $ stack [
+s "bd bd*2",
+s "hh*2 [sn cp] cp future*4",
+s (samples "arpy*8" (run 8))
+]
+
+d8 silence
+
+--This is useful if you want to use a transform or synth parameter on the entire stack:
+--これは、スタック全体でtransformパラメータまたはsynthパラメータを使用する場合に便利です。
+
+d9 $ slow 4 $ whenmod 5 3 ( striate 3) $ stack [
+s "bd bd*2",
+s "hh*2 [sn cp] cp future*4",
+s (samples "arpy*8" (run 16))
+] # speed "[[1 0.8],[1.5 2]*2]/3"
+
+d9 silence

@@ -1,0 +1,125 @@
+---[sound]
+--a pattern of strings representing sound sample names (required)
+
+--サウンドサンプル名を表す文字列のパターン（必須）
+
+---[speed]
+--A pattern of numbers which multiplies the speed of sample playback, where 1 means normal speed. Can be used as a cheap way of changing pitch for samples. Negative numbers will cause the sample to be played backwards.
+
+--When using this method to alter sample pitch, there’s a convenience parameter up, which uses units of semitones instead of multiplicative values. For example,
+
+--サンプル再生の速度を掛ける数字のパターン.1は通常のスピードを意味します。 サンプルのピッチを変更する安価な方法として使用できます。 負の数はサンプルを逆方向に再生させます。
+
+--この方法を使用してサンプルピッチを変更する場合、乗法的値の代わりに半音単位を使用する便利なパラメータがあります。 例えば、
+
+d1 $ s "arpy*4" # up "0 4 7 0"
+
+d1 silence
+
+--will play the “arpy” sample at the orginal speed, then up 4 semitones (a third), then up 7 semitones (a fifth), then once more at the original speed.
+
+-- The behavior of speed can also be changed by the unit parameter.
+
+--元のスピードで "arpy"サンプルを再生し、次に4つの半音（3番目）、次に7つの半音（5番目）、次に元のスピードでもう一度再生します。
+--速度の振る舞いは、unitパラメータによって変更することもできます。
+
+
+---[sustain]
+--Sets the duration of the sound in seconds. Primarily used in SuperDirt for softsynths, but can be used for samples as well.
+
+-- サウンドの持続時間を秒単位で設定します。 主にSuperDirtでsoftsynthsに使用されますが、サンプルにも使用できます。
+
+d2 $ s "breaks125" # sustain "1"
+
+d2 silence
+
+---[unit]
+--accepts values of “r” (default), “c”, or “s”, which controls how the speed parameter is interpreted.
+
+-- With unit "r", speed multiplies the sample playback rate, so 1 is normal speed, 2 is double speed, 0.5 half speed, etc.
+
+-- With unit "c", speed specifies the playback rate relative to cycle length. So unit "c" # speed "1" will speed up or slow down the sample to fit in one cycle, unit "c" # speed "2" will play the sample twice as fast (so that it fits in half a cycle), etc. This can be useful for beat matching if your sample is a drum loop.
+
+-- With unit "s", speed specifies the playback length in seconds.
+
+--速度パラメータの解釈方法を制御する "r"（デフォルト）、 "c"、または "s"の値を受け入れます。
+
+-- unit "r"の場合、速度はサンプルの再生レートに掛け合わされるので、1は標準速度、2は倍速、0.5は半速度などです。
+
+-- ユニット "c"の場合、speedはサイクル長に対する再生レートを指定します。 unit "c"＃speed "1"はサンプルを1サイクルに収まるように加速または減速します。unit "c"＃speed "2"はサンプルを2倍速く再生します（半サイクルに収まるように） これは、サンプルがドラムループの場合にビートマッチングに役立ちます。
+
+-- 単位 "s"の場合、speedは再生の長さを秒単位で指定します。
+
+d3 $ s "breaks125" # unit "c"
+
+d3 silence
+
+--- [vowel]
+---formant filter to make things sound like vowels, a pattern of either a, e, i, o or u. Use a rest (~) for no effect.
+
+--フォルマント・フィルターを使って、vowel、a、e、i、o、またはuのいずれかのパターンのような音を作ります。 効果を出さないためには休符（〜）を使用してください。
+
+d4 $ s "arpy*3 [future ff] cp" # vowel "e"
+
+d4 silence
+
+----[[Combining Parameters]] パラメータの結合
+--Most often, parameters are composed together into synth messages using the # operator. Using #, if you specify the same parameter more than once, you will replace previous values. For example, in the following the rightmost speed value of 2 is what gets used, and the value of 3 is ignored:
+
+--多くの場合、パラメーターは＃演算子を使用してシンセメッセージにまとめられます。 ＃を使用すると、同じパラメーターを複数回指定すると、以前の値を置き換えます。 たとえば、以下では右端の速度値2が使用され、3の値は無視されます。
+
+d5 $ s "bd sn:2" # speed "3" # speed "2"
+
+d5 silence
+
+--Actually, # is shorthand for the |=| operator, and there are a few others which behave a bit differently. For example instead of replacing values, the |+| operator adds them together. For example the following ends up with a value of 5.
+
+--実際には、＃は| = |の略語です。 オペレータであり、少し違った振る舞いをするいくつかのものがあります。 たとえば、値を置き換える代わりに、| + | オペレータはそれらを一緒に追加します。 例えば、次の値は5という値になります。
+
+d6 $ s "bd sn:2" # speed "3" |/| speed "2"
+
+d6 silence
+
+--There also exists |*|, |/| and |-| operators which multiply, divide and subtract the values, as you might expect. Here’s a pattern which adds values taken from a sine fucntion to a speed pattern:
+
+-- | * |、| / |も存在します。 と| - | 期待しているように、値を乗算、除算、減算する演算子。 正弦関数から得られた値を速度パターンに追加するパターンを次に示します。
+
+d7 $ every 2 (|+| speed square) $ s "bd*2" # speed "1 3"
+
+d7 silence
+
+--The |+| |-| |/| and |*| operators only exhibit this behaviour with numerical pattern parameters.
+
+-- | + | | - | | / | と| * | 演算子は数値パターンパラメータでのみこの動作を示します。
+
+---[[Operators]] 演算子
+--[specific to Tidal] 特定の
+--The general rule for things that combine patterns is that they use the structure of the pattern on the left.
+
+--パターンを結合するものの一般的な規則は、左側のパターンの構造を使用することです。
+
+-- 【 |+|, |*|, |-|, |/| 】
+
+-- Operate on ParamPatterns, and perform the arithmetic operation if the two parameters are the same (such as speed and speed), or simply merge the parameters just as # would if the parameters are different.
+
+-- ParamPatternsで操作し、2つのパラメータが同じ場合（速度や速度など）は算術演算を実行するか、パラメータが異なる場合は単純に＃をマージします。
+
+d8 $ s "future*4" # speed "1 2 3 4" |+| speed "2"
+
+d8 silence
+
+-- is the same as
+-- speed "3 4 5 6"と同じです
+
+-- 【 #, |=| 】
+--They mean the same thing: they merge ParamPatterns together
+--同じことを意味します：ParamPatternsを一緒にマージします
+
+-- 【 ###, ***, +++, /// 】
+--These take a list of ParamPatterns as their second argument, and merge them all together with the relevant arithmetic operator. Can simplify long expressions.
+
+--これらは、第2引数としてParamPatternsのリストを取り、関連する算術演算子と一緒にそれらをすべてマージします。 長い表現を簡略化することができます。
+
+d9 $ s "bd sn" # speed "1.2" *** [speed "2", crush "10"]
+
+d9 silence

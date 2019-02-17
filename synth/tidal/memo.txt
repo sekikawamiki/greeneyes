@@ -1,0 +1,59 @@
+tidal 1.0.0 最新機能
+
+:t fast
+型を返してくれる 1.0〜
+
+fast :: Pattern Time -> Pattern a -> Pattern as
+
+:t every haskellの機能
+
+
+~/tidal-master
+
+設定→tidal setting boot path
+
+/home/alex/tidal-master/BootTidal.hs
+
+cmd pwd で現在のpathを確認
+
+
+puredata
+
+midi デバイス
+midi-osc-bridge.pd
+
+録音　soundflower supercoliderのhelp に録音がある
+
+midiをつ合う場合は
+SuperDirt.start;
+でなくて別のやり方
+http://blog.tidalcycles.org/
+ようつべ
+
+Haskell
+
+midi はtidal
+~dirt.soundLibrary.addMIDI(\midi, ~midiOut);
+
+
+iacドライバー
+https://karaage.hatenadiary.jp/entry/20130605/1370451564　
+
+
+
+どうやって作曲をするか
+
+
+superdirt start
+superdirt_startファイルを
+
+open startup files　startup.scd に入れる　１９行目　書き換える　0, 0, 0, 0, 0, 0, 0
+
+1.0からバージョンダウン
+ghc-pkg unregister
+
+
+troop 開発エディタ
+
+
+http://slab.org:8080/index16.html
