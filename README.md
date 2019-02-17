@@ -1,3 +1,1 @@
-# greeneyes
-
-こんにちはgreeneyes
+*js関係とシンセ関係のファイル置き場
