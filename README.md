@@ -6,5 +6,3 @@
 - tidal
 - rubix
 - erebus
-
-１２３４４５
